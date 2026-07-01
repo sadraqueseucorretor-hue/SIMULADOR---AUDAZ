@@ -349,16 +349,16 @@ textarea{resize:vertical;height:80px;}
 .sheet th + th{border-left:1px solid rgba(255,255,255,.14);}
 .sheet th.num,.sheet td.num{text-align:right;}
 .sheet th.ctr,.sheet td.ctr{text-align:center;}
-.sheet td{padding:15px 18px;border-top:1px solid var(--border);color:var(--navy);}
-.sheet td.num{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;font-size:16.5px;}
-.sheet tbody tr:nth-child(odd):not(.sec-row):not(.total-row){background:var(--surface);}
-.sheet .sec-row td{background:#EDF0F6;font-size:11.5px;text-transform:uppercase;letter-spacing:.6px;font-weight:700;color:var(--slate);padding:9px 18px;border-top:1px solid var(--border);}
-.sheet .total-row td{background:var(--gold-lt);border-top:2px solid var(--gold);font-weight:800;color:var(--navy);font-size:17px;}
-.sheet .total-row td.big{font-size:20px;}
-.sheet .fin-row td{background:var(--navy);border-top:2px solid var(--gold);font-weight:800;color:#fff;font-size:17px;}
-.sheet .fin-row td.big{font-size:20px;color:var(--gold);}
+.sheet td{padding:14px 18px;border-top:1px solid var(--border);color:var(--navy);font-size:15px;}
+.sheet td.num{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;font-size:15px;}
+.sheet tbody tr:nth-child(odd):not(.sec-row):not(.total-row):not(.fin-row){background:var(--surface);}
+.sheet .sec-row td{background:#EDF0F6;font-size:11px;text-transform:uppercase;letter-spacing:.6px;font-weight:700;color:var(--slate);padding:9px 18px;border-top:1px solid var(--border);}
+.sheet .total-row td{background:var(--gold-lt);border-top:2px solid var(--gold);font-weight:800;color:var(--navy);font-size:15px;}
+.sheet .fin-row td{background:var(--navy);border-top:2px solid var(--gold);font-weight:800;color:#fff;font-size:15px;}
+.sheet .fin-row td.big{color:var(--gold);}
 .sheet .lbl-strong{font-weight:700;}
-.sheet .cond{color:var(--slate);font-size:13.5px;font-weight:500;}
+.sheet .cond{color:var(--slate);font-size:15px;font-weight:500;}
+.sheet .total-row .cond,.sheet .fin-row .cond{font-weight:700;}
 
 /* ESTILOS EXCLUSIVOS DO AJUSTE VISUAL DA TABELA COMERCIAL */
 .resumo-bloco-entrada {
