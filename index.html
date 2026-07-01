@@ -356,7 +356,6 @@ textarea{resize:vertical;height:80px;}
 .sheet .total-row td{background:var(--gold-lt);border-top:2px solid var(--gold);font-weight:800;color:var(--navy);}
 .sheet .total-row td.big{font-size:15px;}
 .sheet .lbl-strong{font-weight:700;}
-.sheet .pct-chip{display:inline-block;min-width:44px;text-align:center;font-size:10px;font-weight:700;color:var(--slate);background:#fff;border:1px solid var(--border);padding:2px 6px;border-radius:999px;}
 .sheet .cond{color:var(--slate);font-size:11px;font-weight:500;}
 
 /* ESTILOS EXCLUSIVOS DO AJUSTE VISUAL DA TABELA COMERCIAL */
@@ -1122,15 +1121,12 @@ function atualizarTabelaResumo(d){
     </div>`;
 
   // 3. PLANILHA — Como o imóvel é pago
-  const baseComp = Math.max(d.imovel - d.desconto, 0);
-  const pctBase = (v) => baseComp > 0 ? (v / baseComp) * 100 : 0;
-
   htmlGeral += `<div class="sheet-title">Como o Imóvel é Pago</div>
     <div class="sheet-wrap"><table class="sheet">
-      <thead><tr><th>Descrição</th><th class="ctr">% do Imóvel</th><th class="num">Valor</th></tr></thead>
+      <thead><tr><th>Descrição</th><th class="num">Valor</th></tr></thead>
       <tbody>
-        <tr><td class="lbl-strong">Valor do Imóvel</td><td class="ctr cond">—</td><td class="num">${fmt(d.imovel)}</td></tr>`;
-  if(d.desconto>0) htmlGeral += `<tr><td style="color:var(--ok);">Desconto Comercial</td><td class="ctr cond">—</td><td class="num" style="color:var(--ok);">− ${fmt(d.desconto)}</td></tr>`;
+        <tr><td class="lbl-strong">Valor do Imóvel</td><td class="num">${fmt(d.imovel)}</td></tr>`;
+  if(d.desconto>0) htmlGeral += `<tr><td style="color:var(--ok);">Desconto Comercial</td><td class="num" style="color:var(--ok);">− ${fmt(d.desconto)}</td></tr>`;
 
   const recursos = [
     ['Financiamento Bancário', d.financiamento],
@@ -1139,10 +1135,10 @@ function atualizarTabelaResumo(d){
     ['Moradia Ceará', d.moradiaCeara]
   ].filter(r => r[1] > 0);
   recursos.forEach(([lbl, val]) => {
-    htmlGeral += `<tr><td>${lbl}</td><td class="ctr"><span class="pct-chip">${pctBase(val).toFixed(0)}%</span></td><td class="num">${fmt(val)}</td></tr>`;
+    htmlGeral += `<tr><td>${lbl}</td><td class="num">${fmt(val)}</td></tr>`;
   });
 
-  htmlGeral += `<tr class="total-row"><td>Entrada · recursos próprios</td><td class="ctr">${pctBase(d.entrada).toFixed(0)}%</td><td class="num big">${fmt(d.entrada)}</td></tr>
+  htmlGeral += `<tr class="total-row"><td>Entrada · recursos próprios</td><td class="num big">${fmt(d.entrada)}</td></tr>
       </tbody></table></div>`;
 
   // 4. PLANILHA — Como a entrada será paga
