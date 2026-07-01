@@ -339,6 +339,26 @@ textarea{resize:vertical;height:80px;}
 .comp-entrada .ce-l small{display:block;font-size:9.5px;color:#9A7B1F;font-weight:600;margin-top:3px;text-transform:uppercase;letter-spacing:.4px;}
 .comp-entrada .ce-v{font-size:23px;font-weight:800;color:var(--navy);letter-spacing:-.5px;white-space:nowrap;}
 
+/* ── PLANILHA (SPREADSHEET) DO RESUMO ── */
+.sheet-title{font-size:11px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.5px;margin:0 0 8px;display:flex;align-items:center;gap:7px;}
+.sheet-title::before{content:'';width:4px;height:13px;background:var(--gold);border-radius:2px;}
+.sheet-wrap{border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:18px;box-shadow:var(--sh);}
+.sheet{width:100%;border-collapse:collapse;font-size:13px;}
+.sheet th{background:var(--navy);color:#fff;font-size:9.5px;text-transform:uppercase;letter-spacing:.6px;font-weight:700;padding:10px 14px;text-align:left;}
+.sheet th + th,.sheet td + td{border-left:1px solid var(--border);}
+.sheet th + th{border-left:1px solid rgba(255,255,255,.14);}
+.sheet th.num,.sheet td.num{text-align:right;}
+.sheet th.ctr,.sheet td.ctr{text-align:center;}
+.sheet td{padding:11px 14px;border-top:1px solid var(--border);color:var(--navy);}
+.sheet td.num{font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap;}
+.sheet tbody tr:nth-child(odd):not(.sec-row):not(.total-row){background:var(--surface);}
+.sheet .sec-row td{background:#EDF0F6;font-size:9.5px;text-transform:uppercase;letter-spacing:.6px;font-weight:700;color:var(--slate);padding:7px 14px;border-top:1px solid var(--border);}
+.sheet .total-row td{background:var(--gold-lt);border-top:2px solid var(--gold);font-weight:800;color:var(--navy);}
+.sheet .total-row td.big{font-size:15px;}
+.sheet .lbl-strong{font-weight:700;}
+.sheet .pct-chip{display:inline-block;min-width:44px;text-align:center;font-size:10px;font-weight:700;color:var(--slate);background:#fff;border:1px solid var(--border);padding:2px 6px;border-radius:999px;}
+.sheet .cond{color:var(--slate);font-size:11px;font-weight:500;}
+
 /* ESTILOS EXCLUSIVOS DO AJUSTE VISUAL DA TABELA COMERCIAL */
 .resumo-bloco-entrada {
   background: #F8FAFC;
@@ -1101,14 +1121,16 @@ function atualizarTabelaResumo(d){
       </div>
     </div>`;
 
-  // 3. Composição do pagamento — com % de cobertura e entrada em destaque
+  // 3. PLANILHA — Como o imóvel é pago
   const baseComp = Math.max(d.imovel - d.desconto, 0);
   const pctBase = (v) => baseComp > 0 ? (v / baseComp) * 100 : 0;
 
-  htmlGeral += `<div class="resumo-sub-card" style="margin-top:0;">
-      <div style="font-size:11px; font-weight:700; color:var(--slate); text-transform:uppercase; margin-bottom:8px;">Como o imóvel é pago</div>
-      <div class="comp-row"><span style="font-weight:700; color:var(--navy);">Valor do Imóvel</span><div class="cr-right"><span class="rt-val" style="font-size:15px;">${fmt(d.imovel)}</span></div></div>`;
-  if(d.desconto>0) htmlGeral += `<div class="comp-row"><span style="color:var(--ok);">Desconto Comercial</span><div class="cr-right"><span class="rt-val" style="color:var(--ok);">− ${fmt(d.desconto)}</span></div></div>`;
+  htmlGeral += `<div class="sheet-title">Como o Imóvel é Pago</div>
+    <div class="sheet-wrap"><table class="sheet">
+      <thead><tr><th>Descrição</th><th class="ctr">% do Imóvel</th><th class="num">Valor</th></tr></thead>
+      <tbody>
+        <tr><td class="lbl-strong">Valor do Imóvel</td><td class="ctr cond">—</td><td class="num">${fmt(d.imovel)}</td></tr>`;
+  if(d.desconto>0) htmlGeral += `<tr><td style="color:var(--ok);">Desconto Comercial</td><td class="ctr cond">—</td><td class="num" style="color:var(--ok);">− ${fmt(d.desconto)}</td></tr>`;
 
   const recursos = [
     ['Financiamento Bancário', d.financiamento],
@@ -1117,111 +1139,52 @@ function atualizarTabelaResumo(d){
     ['Moradia Ceará', d.moradiaCeara]
   ].filter(r => r[1] > 0);
   recursos.forEach(([lbl, val]) => {
-    htmlGeral += `<div class="comp-row"><span>${lbl}</span><div class="cr-right"><span class="comp-pct">${pctBase(val).toFixed(0)}%</span><span class="rt-val">${fmt(val)}</span></div></div>`;
+    htmlGeral += `<tr><td>${lbl}</td><td class="ctr"><span class="pct-chip">${pctBase(val).toFixed(0)}%</span></td><td class="num">${fmt(val)}</td></tr>`;
   });
 
-  htmlGeral += `<div class="comp-entrada">
-      <div class="ce-l">Entrada · recursos próprios<small>${pctBase(d.entrada).toFixed(0)}% do valor do imóvel</small></div>
-      <div class="ce-v">${fmt(d.entrada)}</div>
-    </div>
-    </div>`;
+  htmlGeral += `<tr class="total-row"><td>Entrada · recursos próprios</td><td class="ctr">${pctBase(d.entrada).toFixed(0)}%</td><td class="num big">${fmt(d.entrada)}</td></tr>
+      </tbody></table></div>`;
 
+  // 4. PLANILHA — Como a entrada será paga
   let htmlEntrada = '';
   if(d.entrada > 0) {
     const hasAporte = d.sinalP > 0 || d.sinais.some(s => s.v > 0) || d.baloes.some(b => b.v > 0);
-    htmlEntrada = `
-    <div class="resumo-bloco-entrada">
-      <h4>Como a Entrada Será Paga</h4>
-      <div class="hint-line" style="margin-bottom:12px;">Detalhamento de como a entrada de <strong>${fmt(d.entrada)}</strong> será quitada${hasAporte ? ' — sinais, reforços e parcelas.' : ' em parcelas.'}</div>
-    `;
+    const temParcelas = (d.tipoEntrada === 'prepos') ? (d.qtdPre > 0 || d.qtdPos > 0) : (d.qtdParcelasLinear > 0 && d.vParcelaLinear > 0);
+
+    let rows = '';
 
     if(d.sinalP > 0 || d.sinais.some(s => s.v > 0)) {
-      htmlEntrada += `<div class="resumo-sub-card">
-        <div style="font-size:11px; font-weight:700; color:var(--slate); text-transform:uppercase; margin-bottom:6px;">Apoio de Sinais / Entrada Inicial</div>`;
-        
-      if(d.sinalP > 0) {
-        htmlEntrada += `
-        <div class="resumo-flex-item">
-          <span>• Sinal Principal (Ato)</span>
-          <span class="rt-val">${fmt(d.sinalP)}</span>
-          <span class="rt-date">${formatarData(d.dSinalP)}</span>
-        </div>`;
-      }
-      
-      d.sinais.forEach((s, i) => {
-        if(s.v > 0) {
-          htmlEntrada += `
-          <div class="resumo-flex-item">
-            <span>• Sinal Complementar ${i+1}</span>
-            <span class="rt-val">${fmt(s.v)}</span>
-            <span class="rt-date">${formatarData(s.d)}</span>
-          </div>`;
-        }
-      });
-      htmlEntrada += `</div>`;
+      rows += `<tr class="sec-row"><td colspan="3">Sinais / Entrada Inicial</td></tr>`;
+      if(d.sinalP > 0) rows += `<tr><td>Sinal Principal (Ato)</td><td class="num">${fmt(d.sinalP)}</td><td class="cond">${formatarData(d.dSinalP)}</td></tr>`;
+      d.sinais.forEach((s, i) => { if(s.v > 0) rows += `<tr><td>Sinal Complementar ${i+1}</td><td class="num">${fmt(s.v)}</td><td class="cond">${formatarData(s.d)}</td></tr>`; });
     }
 
     if(d.baloes.some(b => b.v > 0)) {
-      htmlEntrada += `<div class="resumo-sub-card">
-        <div style="font-size:11px; font-weight:700; color:var(--slate); text-transform:uppercase; margin-bottom:6px;">Reforços / Balões Intermediários</div>`;
-      d.baloes.forEach((b, i) => {
-        if(b.v > 0) {
-          htmlEntrada += `
-          <div class="resumo-flex-item">
-            <span>• Balão Intermediário ${i+1}</span>
-            <span class="rt-val">${fmt(b.v)}</span>
-            <span class="rt-date">${formatarData(b.d)}</span>
-          </div>`;
-        }
-      });
-      htmlEntrada += `</div>`;
+      rows += `<tr class="sec-row"><td colspan="3">Reforços / Balões Intermediários</td></tr>`;
+      d.baloes.forEach((b, i) => { if(b.v > 0) rows += `<tr><td>Balão Intermediário ${i+1}</td><td class="num">${fmt(b.v)}</td><td class="cond">${formatarData(b.d)}</td></tr>`; });
     }
 
     if(d.saldo > 0) {
-      const temParcelas = (d.tipoEntrada === 'prepos') ? (d.qtdPre > 0 || d.qtdPos > 0) : (d.qtdParcelasLinear > 0 && d.vParcelaLinear > 0);
-      htmlEntrada += `<div class="resumo-sub-card">
-        <div style="font-size:11px; font-weight:700; color:var(--slate); text-transform:uppercase; margin-bottom:6px;">Parcelamento do Saldo</div>`;
-      if(hasAporte) {
-        htmlEntrada += `<div class="resumo-flex-item" style="background:var(--surface); padding:6px 10px; border-radius:4px; margin-bottom:6px;">
-          <span style="font-weight:600;">Saldo Líquido a Parcelar</span>
-          <span class="rt-val" style="color:var(--navy);">${fmt(d.saldo)}</span>
-        </div>`;
-      }
-      if(!temParcelas) {
-        htmlEntrada += `<div class="hint-line" style="padding:6px 2px;">Informe a quantidade de parcelas na <strong>seção 3 (Negociação da Entrada)</strong> para detalhar o valor mensal.</div>`;
-      }
+      rows += `<tr class="sec-row"><td colspan="3">Parcelamento do Saldo</td></tr>`;
+      if(hasAporte) rows += `<tr><td class="lbl-strong">Saldo Líquido a Parcelar</td><td class="num">${fmt(d.saldo)}</td><td class="cond">—</td></tr>`;
 
       if(d.tipoEntrada === 'prepos') {
-        if(d.qtdPre > 0 && d.valPre > 0) {
-          htmlEntrada += `
-          <div class="resumo-flex-item">
-            <div><span class="resumo-badge-fase badge-pre">Pré-Chaves</span> <span style="font-weight:600;">${d.qtdPre}x mensais</span></div>
-            <span class="rt-val" style="color:var(--navy);">${fmt(d.valParcPre)}</span>
-            <span class="rt-date">${d.dInicialPre ? `Início: ${formatarData(d.dInicialPre)}` : 'Período Obra'}</span>
-          </div>`;
-        }
-        if(d.qtdPos > 0 && d.valPos > 0) {
-          htmlEntrada += `
-          <div class="resumo-flex-item">
-            <div><span class="resumo-badge-fase badge-pos">Pós-Chaves</span> <span style="font-weight:600;">${d.qtdPos}x mensais</span></div>
-            <span class="rt-val" style="color:var(--navy);">${fmt(d.valParcPos)}</span>
-            <span class="rt-date">${d.dInicialPos ? `Início: ${formatarData(d.dInicialPos)}` : 'Pós-Entrega'}</span>
-          </div>`;
-        }
+        if(d.qtdPre > 0 && d.valPre > 0) rows += `<tr class="total-row"><td><span class="resumo-badge-fase badge-pre">Pré-Chaves</span> ${d.qtdPre}x mensais</td><td class="num big">${fmt(d.valParcPre)}</td><td class="cond">${d.dInicialPre ? 'Início: ' + formatarData(d.dInicialPre) : 'Período Obra'}</td></tr>`;
+        if(d.qtdPos > 0 && d.valPos > 0) rows += `<tr class="total-row"><td><span class="resumo-badge-fase badge-pos">Pós-Chaves</span> ${d.qtdPos}x mensais</td><td class="num big">${fmt(d.valParcPos)}</td><td class="cond">${d.dInicialPos ? 'Início: ' + formatarData(d.dInicialPos) : 'Pós-Entrega'}</td></tr>`;
       } else {
-        if(d.vParcelaLinear > 0 && d.qtdParcelasLinear > 0) {
-          htmlEntrada += `
-          <div class="resumo-flex-item">
-            <div><span class="resumo-badge-fase badge-linear">Linear</span> <span style="font-weight:600;">${d.qtdParcelasLinear}x parcelas</span></div>
-            <span class="rt-val" style="color:var(--navy);">${fmt(d.vParcelaLinear)}</span>
-            <span class="rt-date">${d.dInicialLinear ? `Início: ${formatarData(d.dInicialLinear)}` : 'Fluxo Direto'}</span>
-          </div>`;
-        }
+        if(d.vParcelaLinear > 0 && d.qtdParcelasLinear > 0) rows += `<tr class="total-row"><td><span class="resumo-badge-fase badge-linear">Linear</span> ${d.qtdParcelasLinear}x parcelas</td><td class="num big">${fmt(d.vParcelaLinear)}</td><td class="cond">${d.dInicialLinear ? 'Início: ' + formatarData(d.dInicialLinear) : 'Fluxo Direto'}</td></tr>`;
       }
-      htmlEntrada += `</div>`;
+
+      if(!temParcelas) rows += `<tr><td colspan="3" class="cond" style="text-align:center; padding:10px;">Informe a quantidade de parcelas na seção 3 (Negociação da Entrada) para detalhar o valor mensal.</td></tr>`;
     }
 
-    htmlEntrada += `</div>`;
+    htmlEntrada = `
+      <div class="sheet-title">Como a Entrada Será Paga</div>
+      <div class="hint-line" style="margin:-8px 0 10px;">Como a entrada de <strong>${fmt(d.entrada)}</strong> será quitada${hasAporte ? ' — sinais, reforços e parcelas.' : ' em parcelas.'}</div>
+      <div class="sheet-wrap"><table class="sheet">
+        <thead><tr><th>Descrição</th><th class="num">Valor</th><th>Data / Condição</th></tr></thead>
+        <tbody>${rows || `<tr><td colspan="3" class="cond" style="text-align:center; padding:12px;">Entrada quitada sem parcelamento adicional.</td></tr>`}</tbody>
+      </table></div>`;
   }
 
   const htmlRodape = `<div style="text-align:center; font-size:10.5px; color:var(--slate2); margin-top:16px; padding-top:12px; border-top:1px solid var(--border);">
