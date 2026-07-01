@@ -165,6 +165,21 @@ textarea{resize:vertical;height:80px;}
 .kpi.highlight .kpi-lbl{color:var(--slate2);}
 .kpi-val{font-size:22px;font-weight:700;color:var(--navy);line-height:1;}
 .kpi.highlight .kpi-val{color:var(--white);}
+.kpi-hint{font-size:10px;color:var(--slate2);margin-top:8px;line-height:1.3;max-width:210px;}
+.kpi.highlight .kpi-hint{color:rgba(255,255,255,.55);}
+
+/* ── BARRA DE COMPOSIÇÃO DO PAGAMENTO ── */
+.comp-bar{display:flex;width:100%;height:38px;border-radius:8px;overflow:hidden;border:1px solid var(--border);background:var(--surface);}
+.comp-seg{height:100%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;transition:width .5s ease;overflow:hidden;white-space:nowrap;min-width:0;}
+.comp-legend{display:flex;flex-wrap:wrap;gap:10px 20px;margin-top:16px;}
+.comp-item{display:flex;align-items:center;gap:8px;font-size:12px;}
+.comp-swatch{width:12px;height:12px;border-radius:3px;flex-shrink:0;}
+.comp-item .cl{color:var(--slate);}
+.comp-item .cv{font-weight:700;color:var(--navy);}
+.comp-item .cp{color:var(--slate2);font-size:11px;}
+.comp-empty{font-size:12px;color:var(--slate2);}
+.hint-line{font-size:11px;color:var(--slate);line-height:1.45;}
+.hint-line strong{color:var(--navy);}
 
 /* ── PARCELAMENTO BOX (CLARO E LEVE) ── */
 .parc-box{
@@ -570,18 +585,27 @@ button:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.1);}
 
 </div>
 
+<div class="card" id="cardComposicao">
+  <div class="card-title">Composição do Pagamento do Imóvel</div>
+  <div class="hint-line" style="margin-bottom:16px;">De onde vem cada parte do valor do imóvel. A parte em <strong style="color:#F97316;">laranja (Entrada)</strong> é o que o cliente paga por conta própria.</div>
+  <div class="comp-bar" id="compBar"></div>
+  <div class="comp-legend" id="compLegend"><div class="comp-empty">Informe o valor do imóvel para visualizar a composição.</div></div>
+</div>
+
 <div class="card">
-  
+
   <div class="card-title center" style="margin-bottom:24px;">Negociação da Entrada</div>
 
   <div class="kpi-row">
     <div class="kpi">
       <div class="kpi-lbl">Entrada Necessária</div>
       <div class="kpi-val" id="entradaFinal">R$ 0,00</div>
+      <div class="kpi-hint">Valor que falta além do financiamento e dos recursos</div>
     </div>
     <div class="kpi highlight">
       <div class="kpi-lbl">Saldo a Parcelar</div>
       <div class="kpi-val" id="saldoParcelado">R$ 0,00</div>
+      <div class="kpi-hint">O que sobra da entrada após sinais e balões, para dividir em parcelas</div>
     </div>
   </div>
 
@@ -628,6 +652,10 @@ button:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.1);}
         <option value="linear">Entrada Linear</option>
         <option value="prepos">Pré-Chaves + Pós-Chaves</option>
     </select>
+  </div>
+
+  <div class="hint-line" style="margin:-4px 4px 16px;">
+    <strong>Linear:</strong> divide o saldo em parcelas mensais iguais. &nbsp;•&nbsp; <strong>Pré + Pós-Chaves:</strong> uma parte é paga durante a obra e o restante após a entrega das chaves.
   </div>
 
   <div class="parc-box">
@@ -1149,6 +1177,38 @@ function atualizarTabelaResumo(d){
   grid.innerHTML = htmlGeral + htmlEntrada + htmlPosEntrega;
 }
 
+/* ── BARRA DE COMPOSIÇÃO DO PAGAMENTO DO IMÓVEL ── */
+function renderComposicao(d){
+  const bar = document.getElementById('compBar');
+  const legend = document.getElementById('compLegend');
+  if(!bar || !legend) return;
+
+  const base = Math.max(d.imovel - d.desconto, 0);
+  if(base <= 0){
+    bar.innerHTML = '';
+    legend.innerHTML = '<div class="comp-empty">Informe o valor do imóvel para visualizar a composição.</div>';
+    return;
+  }
+
+  const segs = [
+    {lbl:'Financiamento', val:d.financiamento, cor:'#0B1629'},
+    {lbl:'Subsídio',      val:d.subsidio,      cor:'#16A34A'},
+    {lbl:'FGTS',          val:d.fgts,          cor:'#C9A84C'},
+    {lbl:'Moradia Ceará', val:d.moradiaCeara,  cor:'#0EA5E9'},
+    {lbl:'Entrada',       val:d.entrada,       cor:'#F97316'}
+  ].filter(s => s.val > 0);
+
+  bar.innerHTML = segs.map(s => {
+    const pct = (s.val / base) * 100;
+    return `<div class="comp-seg" style="width:${pct}%; background:${s.cor};" title="${s.lbl}: ${fmt(s.val)}">${pct >= 8 ? Math.round(pct)+'%' : ''}</div>`;
+  }).join('');
+
+  legend.innerHTML = segs.map(s => {
+    const pct = (s.val / base) * 100;
+    return `<div class="comp-item"><span class="comp-swatch" style="background:${s.cor}"></span><span class="cl">${s.lbl}</span><span class="cv">${fmt(s.val)}</span><span class="cp">${pct.toFixed(1)}%</span></div>`;
+  }).join('');
+}
+
 /* ── CÁLCULO PRINCIPAL ── */
 function calc(){
   const renda         = gv('renda');
@@ -1257,6 +1317,8 @@ function calc(){
 
   const riscoOp = imovel > 0 ? (saldo / imovel) * 100 : 0;
   setRiscoCustom('riscoOperacao', 'riscoBar', 'riscoInsight', riscoOp, classificarRiscoOperacao(riscoOp));
+
+  renderComposicao({imovel, desconto, financiamento, subsidio, fgts, moradiaCeara, entrada});
 
   renderizarGraficoSeguroObra(parcelaFin, sv('dataAtual'));
 
