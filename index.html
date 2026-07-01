@@ -309,6 +309,26 @@ textarea{resize:vertical;height:80px;}
 .rt-date { color:var(--slate); font-size:12px; }
 .re-empty { padding:30px; text-align:center; color:var(--slate2); background:var(--surface); border:1px dashed var(--border); border-radius:var(--rsm); }
 
+/* ── RESUMO: CABEÇALHO PERSONALIZADO + CARTÕES DE DESTAQUE ── */
+.resumo-hero{
+  background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%);
+  border-radius:var(--rsm);
+  border-bottom:3px solid var(--gold);
+  padding:16px 22px;
+  margin-bottom:16px;
+}
+.resumo-hero .rh-lbl{font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,.5);margin-bottom:4px;}
+.resumo-hero .rh-cliente{font-size:18px;font-weight:700;color:var(--white);line-height:1.1;}
+.resumo-hero .rh-emp{font-size:12px;font-weight:600;color:var(--gold);margin-top:4px;}
+.resumo-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px;}
+.resumo-kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--rsm);border-top:3px solid var(--slate2);padding:14px 16px;text-align:center;}
+.resumo-kpi.gold{border-top-color:var(--gold);background:var(--gold-lt);}
+.resumo-kpi.navy{border-top-color:var(--navy);}
+.resumo-kpi .rk-lbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--slate);margin-bottom:6px;}
+.resumo-kpi .rk-val{font-size:19px;font-weight:800;color:var(--navy);line-height:1.1;letter-spacing:-.3px;}
+.resumo-kpi .rk-sub{font-size:10px;color:var(--slate2);margin-top:5px;line-height:1.3;}
+@media(max-width:640px){ .resumo-kpis{grid-template-columns:1fr;} }
+
 /* ESTILOS EXCLUSIVOS DO AJUSTE VISUAL DA TABELA COMERCIAL */
 .resumo-bloco-entrada {
   background: #F8FAFC;
@@ -1037,28 +1057,51 @@ function atualizarTabelaResumo(d){
   if(!grid) return;
 
   if(d.imovel <= 0) {
-    grid.innerHTML = '<div class="re-empty">Preencha os valores da proposta para visualizar a tabela gerada automaticamente.</div>';
+    grid.innerHTML = '<div class="re-empty">Preencha os valores da proposta para visualizar o resumo gerado automaticamente.</div>';
     return;
   }
 
-  let htmlGeral = `<table class="rtable">
-    <thead>
-      <tr>
-        <th>Descrição</th>
-        <th>Valor</th>
-        <th>Data / Notas</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>Valor do Imóvel</td><td class="rt-val">${fmt(d.imovel)}</td><td class="rt-date">—</td></tr>`;
-  
-  if(d.financiamento>0) htmlGeral += `<tr><td>Financiamento Bancário</td><td class="rt-val">${fmt(d.financiamento)}</td><td class="rt-date">—</td></tr>`;
-  if(d.desconto>0)      htmlGeral += `<tr><td>Desconto Comercial</td><td class="rt-val">${fmt(d.desconto)}</td><td class="rt-date">—</td></tr>`;
-  if(d.subsidio>0)      htmlGeral += `<tr><td>Subsídio</td><td class="rt-val">${fmt(d.subsidio)}</td><td class="rt-date">—</td></tr>`;
-  if(d.fgts>0)          htmlGeral += `<tr><td>Uso de FGTS</td><td class="rt-val">${fmt(d.fgts)}</td><td class="rt-date">—</td></tr>`;
-  if(d.moradiaCeara>0)  htmlGeral += `<tr><td>Moradia Ceará</td><td class="rt-val">${fmt(d.moradiaCeara)}</td><td class="rt-date">—</td></tr>`;
-  
-  htmlGeral += `</tbody></table>`;
+  const cliente = sv('clienteNome');
+  const empreend = sv('empreendimento');
+
+  // 1. Cabeçalho personalizado
+  let htmlGeral = `
+    <div class="resumo-hero">
+      <div class="rh-lbl">Proposta preparada para</div>
+      <div class="rh-cliente">${cliente || 'Cliente'}</div>
+      ${empreend ? `<div class="rh-emp">${empreend}</div>` : ''}
+    </div>`;
+
+  // 2. Cartões de destaque
+  htmlGeral += `<div class="resumo-kpis">
+      <div class="resumo-kpi navy">
+        <div class="rk-lbl">Valor do Imóvel</div>
+        <div class="rk-val">${fmt(d.imovel)}</div>
+        ${d.desconto > 0 ? `<div class="rk-sub">Desconto de ${fmt(d.desconto)}</div>` : '<div class="rk-sub">Valor de tabela</div>'}
+      </div>
+      <div class="resumo-kpi gold">
+        <div class="rk-lbl">Entrada Total</div>
+        <div class="rk-val">${fmt(d.entrada)}</div>
+        ${d.saldo > 0 ? `<div class="rk-sub">Saldo parcelável de ${fmt(d.saldo)}</div>` : '<div class="rk-sub">Recursos próprios</div>'}
+      </div>
+      <div class="resumo-kpi">
+        <div class="rk-lbl">Parcela Financiamento</div>
+        <div class="rk-val">${d.parcelaFin > 0 ? fmt(d.parcelaFin) : '—'}</div>
+        <div class="rk-sub">${d.parcelaFin > 0 ? (d.dEntrega ? 'Mensal · a partir de ' + formatarData(d.dEntrega) : 'Mensal, pós-entrega') : 'A definir com o banco'}</div>
+      </div>
+    </div>`;
+
+  // 3. Composição do pagamento (lista limpa, sem coluna vazia)
+  htmlGeral += `<div class="resumo-sub-card" style="margin-top:0;">
+      <div style="font-size:11px; font-weight:700; color:var(--slate); text-transform:uppercase; margin-bottom:4px;">Composição do Pagamento</div>
+      <div class="resumo-flex-item"><span>Valor do Imóvel</span><span class="rt-val">${fmt(d.imovel)}</span></div>`;
+  if(d.desconto>0)      htmlGeral += `<div class="resumo-flex-item"><span style="color:var(--ok);">Desconto Comercial</span><span class="rt-val" style="color:var(--ok);">− ${fmt(d.desconto)}</span></div>`;
+  if(d.financiamento>0) htmlGeral += `<div class="resumo-flex-item"><span>Financiamento Bancário</span><span class="rt-val">${fmt(d.financiamento)}</span></div>`;
+  if(d.subsidio>0)      htmlGeral += `<div class="resumo-flex-item"><span>Subsídio</span><span class="rt-val">${fmt(d.subsidio)}</span></div>`;
+  if(d.fgts>0)          htmlGeral += `<div class="resumo-flex-item"><span>Uso de FGTS</span><span class="rt-val">${fmt(d.fgts)}</span></div>`;
+  if(d.moradiaCeara>0)  htmlGeral += `<div class="resumo-flex-item"><span>Moradia Ceará</span><span class="rt-val">${fmt(d.moradiaCeara)}</span></div>`;
+  htmlGeral += `<div class="resumo-flex-item" style="border-top:2px solid var(--border); border-bottom:none; margin-top:4px; padding-top:10px;"><span style="font-weight:700; color:var(--navy);">Entrada (recursos próprios)</span><span class="rt-val" style="color:var(--navy); font-weight:800;">${fmt(d.entrada)}</span></div>
+    </div>`;
 
   let htmlEntrada = '';
   if(d.entrada > 0) {
@@ -1155,19 +1198,11 @@ function atualizarTabelaResumo(d){
     htmlEntrada += `</div>`;
   }
 
-  let htmlPosEntrega = '';
-  if(d.parcelaFin > 0) {
-    htmlPosEntrega = `<table class="rtable" style="margin-top:10px;">
-      <tbody>
-        <tr style="background: rgba(11,22,41,0.02); font-weight:600;">
-          <td style="width:40%;">Parcela de Financiamento</td>
-          <td class="rt-val" style="width:30%; color:var(--navy);">${fmt(d.parcelaFin)}</td>
-          <td class="rt-date" style="width:30%;">${d.dEntrega ? `Pós-Entrega (${formatarData(d.dEntrega)})` : 'Fase Definitiva'}</td>
-        </tr>
-      </tbody></table>`;
-  }
+  const htmlRodape = `<div style="text-align:center; font-size:10.5px; color:var(--slate2); margin-top:16px; padding-top:12px; border-top:1px solid var(--border);">
+      Resumo gerado automaticamente · sujeito à análise de crédito e disponibilidade de unidades.
+    </div>`;
 
-  grid.innerHTML = htmlGeral + htmlEntrada + htmlPosEntrega;
+  grid.innerHTML = htmlGeral + htmlEntrada + htmlRodape;
 }
 
 /* ── CÁLCULO PRINCIPAL ── */
