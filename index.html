@@ -355,6 +355,8 @@ textarea{resize:vertical;height:80px;}
 .sheet .sec-row td{background:#EDF0F6;font-size:11.5px;text-transform:uppercase;letter-spacing:.6px;font-weight:700;color:var(--slate);padding:9px 18px;border-top:1px solid var(--border);}
 .sheet .total-row td{background:var(--gold-lt);border-top:2px solid var(--gold);font-weight:800;color:var(--navy);font-size:17px;}
 .sheet .total-row td.big{font-size:20px;}
+.sheet .fin-row td{background:rgba(11,22,41,.045);border-top:2px solid var(--navy);font-weight:800;color:var(--navy);font-size:17px;}
+.sheet .fin-row td.big{font-size:20px;}
 .sheet .lbl-strong{font-weight:700;}
 .sheet .cond{color:var(--slate);font-size:13.5px;font-weight:500;}
 
@@ -1101,25 +1103,6 @@ function atualizarTabelaResumo(d){
       ${empreend ? `<div class="rh-emp">${empreend}</div>` : ''}
     </div>`;
 
-  // 2. Cartões de destaque
-  htmlGeral += `<div class="resumo-kpis">
-      <div class="resumo-kpi navy">
-        <div class="rk-lbl">Valor do Imóvel</div>
-        <div class="rk-val">${fmt(d.imovel)}</div>
-        ${d.desconto > 0 ? `<div class="rk-sub">Desconto de ${fmt(d.desconto)}</div>` : '<div class="rk-sub">Valor de tabela</div>'}
-      </div>
-      <div class="resumo-kpi gold">
-        <div class="rk-lbl">Entrada Total</div>
-        <div class="rk-val">${fmt(d.entrada)}</div>
-        ${d.saldo > 0 ? `<div class="rk-sub">Saldo parcelável de ${fmt(d.saldo)}</div>` : '<div class="rk-sub">Recursos próprios</div>'}
-      </div>
-      <div class="resumo-kpi">
-        <div class="rk-lbl">Parcela Financiamento</div>
-        <div class="rk-val">${d.parcelaFin > 0 ? fmt(d.parcelaFin) : '—'}</div>
-        <div class="rk-sub">${d.parcelaFin > 0 ? (d.dEntrega ? 'Mensal · a partir de ' + formatarData(d.dEntrega) : 'Mensal, pós-entrega') : 'A definir com o banco'}</div>
-      </div>
-    </div>`;
-
   // 3. PLANILHA — Como o imóvel é pago
   htmlGeral += `<div class="sheet-title">Como o Imóvel é Pago</div>
     <div class="sheet-wrap"><table class="sheet">
@@ -1172,6 +1155,11 @@ function atualizarTabelaResumo(d){
       }
 
       if(!temParcelas) rows += `<tr><td colspan="3" class="cond" style="text-align:center; padding:10px;">Informe a quantidade de parcelas na seção 3 (Negociação da Entrada) para detalhar o valor mensal.</td></tr>`;
+    }
+
+    if(d.parcelaFin > 0) {
+      rows += `<tr class="sec-row"><td colspan="3">Financiamento Habitacional · Após a Entrega</td></tr>`;
+      rows += `<tr class="fin-row"><td class="lbl-strong">Parcela do Financiamento</td><td class="num big">${fmt(d.parcelaFin)}</td><td class="cond">${d.dEntrega ? 'Mensal · a partir de ' + formatarData(d.dEntrega) : 'Mensal, pós-entrega'}</td></tr>`;
     }
 
     htmlEntrada = `
