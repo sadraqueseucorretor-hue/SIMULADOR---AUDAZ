@@ -76,6 +76,11 @@ body{
   box-shadow:var(--sh);
   border:1px solid var(--border);
   margin-bottom:18px;
+  transition:box-shadow .2s ease, border-color .2s ease;
+}
+.card:hover{
+  box-shadow:0 6px 20px rgba(11,22,41,.07);
+  border-color:#D8DFEC;
 }
 .card-title{
   font-size:14px;font-weight:700;
@@ -168,18 +173,13 @@ textarea{resize:vertical;height:80px;}
 .kpi-hint{font-size:10px;color:var(--slate2);margin-top:8px;line-height:1.3;max-width:210px;}
 .kpi.highlight .kpi-hint{color:rgba(255,255,255,.55);}
 
-/* ── BARRA DE COMPOSIÇÃO DO PAGAMENTO ── */
-.comp-bar{display:flex;width:100%;height:38px;border-radius:8px;overflow:hidden;border:1px solid var(--border);background:var(--surface);}
-.comp-seg{height:100%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;transition:width .5s ease;overflow:hidden;white-space:nowrap;min-width:0;}
-.comp-legend{display:flex;flex-wrap:wrap;gap:10px 20px;margin-top:16px;}
-.comp-item{display:flex;align-items:center;gap:8px;font-size:12px;}
-.comp-swatch{width:12px;height:12px;border-radius:3px;flex-shrink:0;}
-.comp-item .cl{color:var(--slate);}
-.comp-item .cv{font-weight:700;color:var(--navy);}
-.comp-item .cp{color:var(--slate2);font-size:11px;}
-.comp-empty{font-size:12px;color:var(--slate2);}
 .hint-line{font-size:11px;color:var(--slate);line-height:1.45;}
 .hint-line strong{color:var(--navy);}
+
+/* ── NUMERAÇÃO DE ETAPAS (FLUXO GUIADO) ── */
+.step-num{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:var(--navy);color:var(--white);font-size:12px;font-weight:700;flex-shrink:0;box-shadow:0 2px 6px rgba(11,22,41,.15);}
+.card-title.step::before{display:none;}
+.card-title.step{gap:10px;}
 
 /* ── PARCELAMENTO BOX (CLARO E LEVE) ── */
 .parc-box{
@@ -558,7 +558,7 @@ button:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.1);}
 <div class="g2">
 
   <div class="card">
-    <div class="card-title">Dados do Cliente</div>
+    <div class="card-title step"><span class="step-num">1</span>Dados do Cliente</div>
     <div class="fg"><label>Nome do Cliente</label><input type="text" id="clienteNome" placeholder="Ex: João da Silva"></div>
     <div class="fg"><label>Renda Mensal</label><input type="text" id="renda" class="money" placeholder="R$ 0,00"></div>
     <div class="fg"><label>Empreendimento</label><input type="text" id="empreendimento" placeholder="Ex: Residential Vitória"></div>
@@ -566,7 +566,7 @@ button:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.1);}
   </div>
 
   <div class="card">
-    <div class="card-title">Valores da Proposta</div>
+    <div class="card-title step"><span class="step-num">2</span>Valores da Proposta</div>
     <div class="fg"><label>Valor do Imóvel</label><input type="text" id="imovel" class="money" placeholder="R$ 0,00"></div>
     <div class="fg"><label>Financiamento</label><input type="text" id="financiamento" class="money" placeholder="R$ 0,00"></div>
     
@@ -585,16 +585,9 @@ button:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.1);}
 
 </div>
 
-<div class="card" id="cardComposicao">
-  <div class="card-title">Composição do Pagamento do Imóvel</div>
-  <div class="hint-line" style="margin-bottom:16px;">De onde vem cada parte do valor do imóvel. A parte em <strong style="color:#F97316;">laranja (Entrada)</strong> é o que o cliente paga por conta própria.</div>
-  <div class="comp-bar" id="compBar"></div>
-  <div class="comp-legend" id="compLegend"><div class="comp-empty">Informe o valor do imóvel para visualizar a composição.</div></div>
-</div>
-
 <div class="card">
 
-  <div class="card-title center" style="margin-bottom:24px;">Negociação da Entrada</div>
+  <div class="card-title center step" style="margin-bottom:24px;"><span class="step-num">3</span>Negociação da Entrada</div>
 
   <div class="kpi-row">
     <div class="kpi">
@@ -732,7 +725,7 @@ button:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.1);}
 </div>
 
 <div class="card">
-  <div class="card-title">Análise Financeira e Riscos</div>
+  <div class="card-title step"><span class="step-num">4</span>Análise Financeira e Riscos</div>
   
   <div class="risco-grid" id="riscoGrid">
     <div class="risco-card" id="cardRiscoOperacao">
@@ -772,7 +765,7 @@ button:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.1);}
 
 <div class="card">
   <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-    <div class="card-title" style="margin:0;">Resumo Comercial da Proposta</div>
+    <div class="card-title step" style="margin:0;"><span class="step-num">5</span>Resumo Comercial da Proposta</div>
   </div>
   <div class="resumo-table-wrap" id="reGrid">
     <div class="re-empty">Preencha os dados para visualizar a tabela de resumo.</div>
@@ -780,7 +773,7 @@ button:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.1);}
 </div>
 
 <div class="card" id="cardSeguroObra">
-  <div class="card-title">Simulação Mensal do Seguro Obra (Fase de Construção)</div>
+  <div class="card-title step"><span class="step-num">6</span>Simulação Mensal do Seguro Obra (Fase de Construção)</div>
   <div class="seguro-obra-panel">
     <div class="seguro-obra-text">
       O seguro obra é uma cobrança proporcional ao avanço físico da construção. Conforme a obra evolui, o valor mensal aumenta gradualmente até atingir o valor integral da parcela do financiamento na entrega do imóvel. Veja a projeção estimada mês a mês:
@@ -796,7 +789,7 @@ button:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.1);}
 </div>
 
 <div class="card" id="fullTimeline">
-  <div class="card-title center" style="margin-bottom: 8px;">Linha do Tempo da Compra</div>
+  <div class="card-title center step" style="margin-bottom: 8px;"><span class="step-num">7</span>Linha do Tempo da Compra</div>
   <div style="text-align:center; font-size:12px; color:var(--slate); margin-bottom: 24px;">Entenda as principais etapas do processo de aquisição do seu imóvel.</div>
   
   <div class="jornada-wrap">
@@ -904,7 +897,7 @@ button:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.1);}
 </div>
 
 <div class="card" style="margin-bottom:0;">
-  <div class="card-title">Observações</div>
+  <div class="card-title step"><span class="step-num">8</span>Observações</div>
   <textarea id="observacoes" placeholder="Condições específicas, negociações extras..."></textarea>
 </div>
 
@@ -1177,38 +1170,6 @@ function atualizarTabelaResumo(d){
   grid.innerHTML = htmlGeral + htmlEntrada + htmlPosEntrega;
 }
 
-/* ── BARRA DE COMPOSIÇÃO DO PAGAMENTO DO IMÓVEL ── */
-function renderComposicao(d){
-  const bar = document.getElementById('compBar');
-  const legend = document.getElementById('compLegend');
-  if(!bar || !legend) return;
-
-  const base = Math.max(d.imovel - d.desconto, 0);
-  if(base <= 0){
-    bar.innerHTML = '';
-    legend.innerHTML = '<div class="comp-empty">Informe o valor do imóvel para visualizar a composição.</div>';
-    return;
-  }
-
-  const segs = [
-    {lbl:'Financiamento', val:d.financiamento, cor:'#0B1629'},
-    {lbl:'Subsídio',      val:d.subsidio,      cor:'#16A34A'},
-    {lbl:'FGTS',          val:d.fgts,          cor:'#C9A84C'},
-    {lbl:'Moradia Ceará', val:d.moradiaCeara,  cor:'#0EA5E9'},
-    {lbl:'Entrada',       val:d.entrada,       cor:'#F97316'}
-  ].filter(s => s.val > 0);
-
-  bar.innerHTML = segs.map(s => {
-    const pct = (s.val / base) * 100;
-    return `<div class="comp-seg" style="width:${pct}%; background:${s.cor};" title="${s.lbl}: ${fmt(s.val)}">${pct >= 8 ? Math.round(pct)+'%' : ''}</div>`;
-  }).join('');
-
-  legend.innerHTML = segs.map(s => {
-    const pct = (s.val / base) * 100;
-    return `<div class="comp-item"><span class="comp-swatch" style="background:${s.cor}"></span><span class="cl">${s.lbl}</span><span class="cv">${fmt(s.val)}</span><span class="cp">${pct.toFixed(1)}%</span></div>`;
-  }).join('');
-}
-
 /* ── CÁLCULO PRINCIPAL ── */
 function calc(){
   const renda         = gv('renda');
@@ -1317,8 +1278,6 @@ function calc(){
 
   const riscoOp = imovel > 0 ? (saldo / imovel) * 100 : 0;
   setRiscoCustom('riscoOperacao', 'riscoBar', 'riscoInsight', riscoOp, classificarRiscoOperacao(riscoOp));
-
-  renderComposicao({imovel, desconto, financiamento, subsidio, fgts, moradiaCeara, entrada});
 
   renderizarGraficoSeguroObra(parcelaFin, sv('dataAtual'));
 
