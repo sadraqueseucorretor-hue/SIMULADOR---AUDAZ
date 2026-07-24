@@ -310,17 +310,40 @@ textarea{resize:vertical;height:80px;}
 .rt-date { color:var(--slate); font-size:12px; }
 .re-empty { padding:30px; text-align:center; color:var(--slate2); background:var(--surface); border:1px dashed var(--border); border-radius:var(--rsm); }
 
-/* ── RESUMO: CABEÇALHO PERSONALIZADO + CARTÕES DE DESTAQUE ── */
+/* ── RESUMO: CABEÇALHO PERSONALIZADO ── */
 .resumo-hero{
+  position:relative;overflow:hidden;
   background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%);
-  border-radius:var(--rsm);
+  border-radius:12px;
   border-bottom:3px solid var(--gold);
-  padding:16px 22px;
+  box-shadow:0 4px 16px rgba(11,22,41,.15);
+  padding:15px 24px;
   margin-bottom:16px;
+  display:flex;align-items:center;gap:18px;
 }
-.resumo-hero .rh-lbl{font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,.5);margin-bottom:4px;}
-.resumo-hero .rh-cliente{font-size:18px;font-weight:700;color:var(--white);line-height:1.1;}
-.resumo-hero .rh-emp{font-size:12px;font-weight:600;color:var(--gold);margin-top:4px;}
+.rhero-av{position:relative;width:54px;height:54px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.rhero-av .av-circ{width:40px;height:40px;border-radius:50%;border:2px solid var(--gold);background:rgba(201,168,76,.12);display:flex;align-items:center;justify-content:center;}
+.rhero-av .av-circ svg{width:21px;height:21px;stroke:var(--gold);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.rhero-av .av-rays{position:absolute;inset:0;width:54px;height:54px;}
+.rhero-av .av-rays line{stroke:var(--gold);stroke-width:2;stroke-linecap:round;opacity:.85;}
+.rhero-txt{position:relative;z-index:2;}
+.resumo-hero .rh-lbl{font-size:10px;text-transform:uppercase;letter-spacing:2px;color:rgba(255,255,255,.6);margin-bottom:3px;}
+.resumo-hero .rh-cliente{font-size:22px;font-weight:800;color:var(--white);line-height:1;letter-spacing:-.3px;}
+.resumo-hero .rh-emp{font-size:12px;font-weight:600;color:var(--gold);margin-top:5px;}
+.rhero-mount{position:absolute;right:0;top:0;height:100%;width:auto;opacity:.16;pointer-events:none;}
+
+/* ── mini-indicadores sob o card do imóvel ── */
+.rstats{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:12px;}
+.rstat{background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:11px 12px;display:flex;gap:9px;align-items:flex-start;}
+.rstat .rs-ico{width:22px;height:22px;flex-shrink:0;}
+.rstat .rs-ico svg{width:22px;height:22px;stroke:#2554C7;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;}
+.rstat .rs-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--slate);line-height:1.2;}
+.rstat .rs-val{font-size:16px;font-weight:800;color:#2554C7;line-height:1.1;margin:3px 0 2px;letter-spacing:-.3px;}
+.rstat .rs-sub{font-size:9.5px;color:var(--slate2);line-height:1.2;}
+
+/* ── rodapé do resumo ── */
+.rfoot{display:flex;align-items:center;justify-content:center;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:11px 16px;margin-top:16px;font-size:12px;color:var(--slate);text-align:center;}
+.rfoot svg{width:16px;height:16px;stroke:var(--slate2);fill:none;stroke-width:1.7;flex-shrink:0;}
 .resumo-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px;}
 .resumo-kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--rsm);border-top:3px solid var(--slate2);padding:14px 16px;text-align:center;}
 .resumo-kpi.gold{border-top-color:var(--gold);background:var(--gold-lt);}
@@ -390,8 +413,7 @@ textarea{resize:vertical;height:80px;}
 .ptl::before{content:'';position:absolute;left:17px;top:20px;bottom:20px;border-left:2px dashed #C7CFDD;}
 .ptl-item{position:relative;margin-bottom:10px;}
 .ptl-item:last-child{margin-bottom:0;}
-.ptl-mark{position:absolute;left:-50px;top:1px;width:36px;height:36px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;z-index:2;box-shadow:0 3px 8px rgba(11,22,41,.2);}
-.ptl-mark svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;}
+.ptl-mark{position:absolute;left:-52px;top:1px;width:36px;height:36px;border-radius:50%;background:var(--navy);border:2.5px solid var(--gold);box-shadow:0 0 0 2px var(--white),0 3px 8px rgba(11,22,41,.22);display:flex;align-items:center;justify-content:center;z-index:2;color:#fff;font-size:15px;font-weight:800;}
 .ptl-hd{background:var(--navy);color:#fff;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:8px 13px;border-radius:8px 8px 0 0;}
 .ptl-box{border:1px solid var(--border);border-top:none;border-radius:0 0 8px 8px;overflow:hidden;}
 
@@ -1153,8 +1175,26 @@ const ICO = {
   carteira: '<svg viewBox="0 0 24 24"><path d="M4 8V6.6C4 5.7 4.7 5 5.6 5H15l1.4 3"/><rect x="3" y="8" width="18" height="12" rx="2.2"/><path d="M15.5 14h2.5"/></svg>',
   cartao:   '<svg viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M2.5 10h19"/><path d="M6 14.5h4"/></svg>',
   doc:      '<svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-9"/><path d="M14 3v6h5"/><path d="M8.5 13.5h5M8.5 17h3"/></svg>',
-  cal:      '<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2.2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>'
+  cal:      '<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2.2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>',
+  pessoa:   '<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c0-4 3.4-6 7.5-6s7.5 2 7.5 6"/></svg>',
+  pizza:    '<svg viewBox="0 0 24 24"><path d="M12 3.5v8.5h8.5"/><path d="M20.5 12A8.5 8.5 0 1 1 12 3.5"/></svg>',
+  calc:     '<svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><rect x="8" y="6" width="8" height="3" rx="0.6"/><path d="M9 13h.01M12 13h.01M15 13h.01M9 16h.01M12 16h.01M15 16h.01M9 19h3"/></svg>',
+  info:     '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>'
 };
+
+/* raios de sol ao redor do avatar do cabeçalho */
+const SUNBURST = '<svg class="av-rays" viewBox="0 0 54 54">'
+  + '<line x1="48" y1="27" x2="52.8" y2="27"/><line x1="45.2" y1="37.5" x2="49.3" y2="39.9"/>'
+  + '<line x1="37.5" y1="45.2" x2="39.9" y2="49.3"/><line x1="27" y1="48" x2="27" y2="52.8"/>'
+  + '<line x1="16.5" y1="45.2" x2="14.1" y2="49.3"/><line x1="8.8" y1="37.5" x2="4.7" y2="39.9"/>'
+  + '<line x1="6" y1="27" x2="1.2" y2="27"/><line x1="8.8" y1="16.5" x2="4.7" y2="14.1"/>'
+  + '<line x1="16.5" y1="8.8" x2="14.1" y2="4.7"/><line x1="27" y1="6" x2="27" y2="1.2"/>'
+  + '<line x1="37.5" y1="8.8" x2="39.9" y2="4.7"/><line x1="45.2" y1="16.5" x2="49.3" y2="14.1"/></svg>';
+
+/* montanhas decorativas do cabeçalho */
+const MOUNTAIN = '<svg class="rhero-mount" viewBox="0 0 320 140" preserveAspectRatio="xMaxYMid meet">'
+  + '<path d="M0 140 L80 46 L140 108 L212 28 L284 108 L320 66" fill="none" stroke="#C9A84C" stroke-width="2"/>'
+  + '<path d="M120 140 L204 58 L262 120 L320 80" fill="none" stroke="#C9A84C" stroke-width="1.5" opacity=".55"/></svg>';
 
 /* linha de 2 colunas: ícone + descrição | valor */
 function pRow(ico, lbl, val, opt){
@@ -1192,14 +1232,18 @@ function atualizarTabelaResumo(d){
   // 1. Cabeçalho personalizado
   const htmlHero = `
     <div class="resumo-hero">
-      <div class="rh-lbl">Proposta preparada para</div>
-      <div class="rh-cliente">${cliente || 'Cliente'}</div>
-      ${empreend ? `<div class="rh-emp">${empreend}</div>` : ''}
+      ${MOUNTAIN}
+      <div class="rhero-av">${SUNBURST}<span class="av-circ">${ICO.pessoa}</span></div>
+      <div class="rhero-txt">
+        <div class="rh-lbl">Proposta preparada para</div>
+        <div class="rh-cliente">${cliente || 'Cliente'}</div>
+        ${empreend ? `<div class="rh-emp">${empreend}</div>` : ''}
+      </div>
     </div>`;
 
-  // 2. CARTÃO — Como o imóvel é pago
-  let htmlGeral = `<div class="pcard">
-      <div class="pcard-hd"><span class="pcard-ico">${ICO.casa}</span>Como o Imóvel é Pago</div>
+  // 2. CARTÃO — Dados do imóvel e financiamento
+  let htmlGeral = `<div class="rcol-l"><div class="pcard">
+      <div class="pcard-hd"><span class="pcard-ico">${ICO.casa}</span>Dados do Imóvel e Financiamento</div>
       <div class="pcard-bd">`;
 
   htmlGeral += pRow(ICO.casa, 'Valor do Imóvel', fmt(d.imovel), {strong:true});
@@ -1211,6 +1255,17 @@ function atualizarTabelaResumo(d){
 
   htmlGeral += pRow(ICO.carteira, 'Entrada · Recursos Próprios', fmt(d.entrada), {cls:'prow-entrada'});
   htmlGeral += `</div></div>`;
+
+  // mini-indicadores
+  const pctEntrada = d.imovel > 0 ? (d.entrada / d.imovel) * 100 : 0;
+  const pctFin = d.imovel > 0 ? (d.financiamento / d.imovel) * 100 : 0;
+  const fmtPct = (p) => p.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2}) + '%';
+  htmlGeral += `<div class="rstats">
+      <div class="rstat"><span class="rs-ico">${ICO.pizza}</span><div><div class="rs-lbl">% de Entrada</div><div class="rs-val">${fmtPct(pctEntrada)}</div><div class="rs-sub">do valor do imóvel</div></div></div>
+      <div class="rstat"><span class="rs-ico">${ICO.calc}</span><div><div class="rs-lbl">Financiamento</div><div class="rs-val">${fmtPct(pctFin)}</div><div class="rs-sub">do valor do imóvel</div></div></div>
+      <div class="rstat"><span class="rs-ico">${ICO.mao}</span><div><div class="rs-lbl">Recursos Próprios</div><div class="rs-val" style="font-size:14px;">${fmt(d.entrada)}</div><div class="rs-sub">entrada total</div></div></div>
+      <div class="rstat"><span class="rs-ico">${ICO.cal}</span><div><div class="rs-lbl">Prazo Total</div><div class="rs-val" style="font-size:14px;">Até entrega</div><div class="rs-sub">do imóvel</div></div></div>
+    </div></div>`;
 
   // 3. CARTÃO — Como a entrada será paga (linha do tempo)
   let htmlEntrada = '';
@@ -1261,7 +1316,7 @@ function atualizarTabelaResumo(d){
           <div class="ptl">`;
       etapas.forEach((e, i) => {
         htmlEntrada += `<div class="ptl-item">
-            <div class="ptl-mark">${e.ico}</div>
+            <div class="ptl-mark">${i+1}</div>
             <div class="ptl-hd">${i+1}. ${e.titulo}</div>
             <div class="ptl-box">${e.rows}</div>
           </div>`;
@@ -1270,9 +1325,7 @@ function atualizarTabelaResumo(d){
     }
   }
 
-  const htmlRodape = `<div style="text-align:center; font-size:10.5px; color:var(--slate2); margin-top:16px; padding-top:12px; border-top:1px solid var(--border);">
-      Resumo gerado automaticamente · sujeito à análise de crédito e disponibilidade de unidades.
-    </div>`;
+  const htmlRodape = `<div class="rfoot">${ICO.info}<span>Resumo gerado automaticamente · sujeito à análise de crédito e disponibilidade de unidades.</span></div>`;
 
   grid.innerHTML = htmlHero + '<div class="resumo-cols">' + htmlGeral + htmlEntrada + '</div>' + htmlRodape;
 }
