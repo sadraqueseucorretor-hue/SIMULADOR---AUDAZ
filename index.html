@@ -18,6 +18,7 @@
   --navy2:#172035;
   --gold:#C9A84C;
   --gold-lt:rgba(201,168,76,.10);
+  --gold-solid:#C69A2E;
   --bg:#F2F4F8;
   --white:#FFFFFF;
   --surface:#F8FAFC;
@@ -359,6 +360,61 @@ textarea{resize:vertical;height:80px;}
 .sheet .lbl-strong{font-weight:700;}
 .sheet .cond{color:var(--slate);font-size:15px;font-weight:500;}
 .sheet .total-row .cond,.sheet .fin-row .cond{font-weight:700;}
+
+/* ── RESUMO EM CARTÕES COM ÍCONES E LINHA DO TEMPO ── */
+.pcard{background:var(--white);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:18px;box-shadow:0 4px 16px rgba(11,22,41,.07);}
+.pcard-hd{display:flex;align-items:center;gap:14px;background:var(--navy);padding:15px 20px;color:#fff;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;}
+.pcard-ico{width:36px;height:36px;border-radius:50%;border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.pcard-ico svg{width:19px;height:19px;stroke:var(--gold);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.pcard-bd{padding:16px;}
+
+/* linhas de 2 colunas (como o imóvel é pago) */
+.prow{display:flex;align-items:stretch;border:1px solid var(--border);border-radius:9px;overflow:hidden;margin-bottom:8px;}
+.prow:last-child{margin-bottom:0;}
+.prow-l{display:flex;align-items:center;gap:14px;padding:13px 16px;flex:1;min-width:0;}
+.prow-ico{width:28px;height:28px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.prow-ico svg{width:23px;height:23px;stroke:var(--navy);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;}
+.prow-lbl{font-size:15px;color:var(--navy);font-weight:500;}
+.prow-v{display:flex;align-items:center;justify-content:flex-end;padding:13px 18px;font-size:15px;font-weight:700;color:var(--navy);background:var(--surface);border-left:1px solid var(--border);min-width:172px;font-variant-numeric:tabular-nums;white-space:nowrap;}
+.prow-entrada{border:2px solid var(--gold);background:var(--gold-lt);}
+.prow-entrada .prow-lbl{font-weight:700;}
+.prow-entrada .prow-ico svg{stroke:#9A7B1F;}
+.prow-entrada .prow-v{background:var(--gold-solid);color:#fff;border-left:none;font-weight:800;}
+
+/* linha do tempo (como a entrada será paga) */
+.phint{font-size:13.5px;color:var(--slate);margin-bottom:18px;}
+.phint strong{color:var(--navy);}
+.ptl{position:relative;padding-left:66px;}
+.ptl::before{content:'';position:absolute;left:23px;top:26px;bottom:26px;border-left:2px dashed #C7CFDD;}
+.ptl-item{position:relative;margin-bottom:16px;}
+.ptl-item:last-child{margin-bottom:0;}
+.ptl-mark{position:absolute;left:-66px;top:2px;width:46px;height:46px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;z-index:2;box-shadow:0 3px 10px rgba(11,22,41,.22);}
+.ptl-mark svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;}
+.ptl-hd{background:var(--navy);color:#fff;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;padding:11px 16px;border-radius:9px 9px 0 0;}
+.ptl-box{border:1px solid var(--border);border-top:none;border-radius:0 0 9px 9px;overflow:hidden;}
+
+/* linhas de 3 colunas */
+.prow3{display:flex;align-items:center;border-top:1px solid var(--border);background:var(--white);}
+.prow3:first-child{border-top:none;}
+.prow3 .c-lbl{flex:1;padding:13px 16px;font-size:15px;color:var(--navy);display:flex;align-items:center;gap:10px;min-width:0;}
+.prow3 .c-val{padding:13px 16px;font-size:15px;font-weight:700;color:var(--navy);text-align:right;min-width:148px;font-variant-numeric:tabular-nums;white-space:nowrap;}
+.prow3 .c-dt{padding:13px 16px;font-size:13px;color:var(--slate);border-left:1px solid var(--border);min-width:180px;display:flex;align-items:center;gap:8px;}
+.prow3 .c-dt svg{width:16px;height:16px;stroke:var(--slate2);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;}
+.prow3 .c-dt strong{color:var(--navy);}
+.prow3.is-parcela{background:var(--gold-lt);}
+.prow3.is-fin .c-val{color:var(--gold-solid);font-weight:800;}
+
+@media(max-width:700px){
+  .prow{flex-direction:column;}
+  .prow-v{border-left:none;border-top:1px solid var(--border);justify-content:flex-start;min-width:0;}
+  .prow-entrada .prow-v{border-top:1px solid var(--gold);}
+  .prow3{flex-wrap:wrap;}
+  .prow3 .c-val{min-width:0;flex:1;text-align:left;}
+  .prow3 .c-dt{border-left:none;border-top:1px solid var(--border);min-width:0;width:100%;}
+  .ptl{padding-left:0;}
+  .ptl::before{display:none;}
+  .ptl-mark{position:static;margin-bottom:10px;}
+}
 
 /* ESTILOS EXCLUSIVOS DO AJUSTE VISUAL DA TABELA COMERCIAL */
 .resumo-bloco-entrada {
@@ -1082,7 +1138,39 @@ function renderizarGraficoSeguroObra(parcelaFin, dataEntregaStr) {
   }
 }
 
-/* ── RESUMO EM TABELA COMPLETO E COM DESIGN COMERCIAL DESTACADO ── */
+/* ── ÍCONES SVG DO RESUMO ── */
+const ICO = {
+  casa:     '<svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V21h13V9.5"/><path d="M10 21v-6h4v6"/></svg>',
+  banco:    '<svg viewBox="0 0 24 24"><path d="M12 3 3 8h18L12 3z"/><path d="M5 11v8M9.3 11v8M14.7 11v8M19 11v8"/><path d="M3 21h18"/></svg>',
+  moeda:    '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7.2v9.6"/><path d="M14.6 9.6c0-1-1.1-1.7-2.6-1.7s-2.6.8-2.6 1.9 1.2 1.8 2.6 1.8 2.6.8 2.6 1.9-1.1 1.7-2.6 1.7-2.6-.7-2.6-1.7"/></svg>',
+  mao:      '<svg viewBox="0 0 24 24"><circle cx="14" cy="8" r="3"/><path d="M2 15.5c1.5-1.2 3-1.2 4.5-.2l2.5 1.7h3.5c1 0 1.6.6 1.6 1.3s-.6 1.2-1.6 1.2H9"/><path d="M9 17 6.5 21"/></svg>',
+  carteira: '<svg viewBox="0 0 24 24"><path d="M4 8V6.6C4 5.7 4.7 5 5.6 5H15l1.4 3"/><rect x="3" y="8" width="18" height="12" rx="2.2"/><path d="M15.5 14h2.5"/></svg>',
+  cartao:   '<svg viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M2.5 10h19"/><path d="M6 14.5h4"/></svg>',
+  doc:      '<svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-9"/><path d="M14 3v6h5"/><path d="M8.5 13.5h5M8.5 17h3"/></svg>',
+  cal:      '<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2.2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>'
+};
+
+/* linha de 2 colunas: ícone + descrição | valor */
+function pRow(ico, lbl, val, opt){
+  const o = opt || {};
+  return `<div class="prow${o.cls ? ' ' + o.cls : ''}">
+      <div class="prow-l"><span class="prow-ico">${ico}</span><span class="prow-lbl"${o.strong ? ' style="font-weight:700;"' : ''}>${lbl}</span></div>
+      <div class="prow-v"${o.valStyle ? ` style="${o.valStyle}"` : ''}>${val}</div>
+    </div>`;
+}
+
+/* linha de 3 colunas: descrição | valor | data/condição */
+function pRow3(lbl, val, cond, opt){
+  const o = opt || {};
+  const temCal = cond && cond !== '—' && !o.noCal;
+  return `<div class="prow3${o.cls ? ' ' + o.cls : ''}">
+      <div class="c-lbl">${lbl}</div>
+      <div class="c-val">${val}</div>
+      <div class="c-dt">${temCal ? ICO.cal : ''}<span>${cond}</span></div>
+    </div>`;
+}
+
+/* ── RESUMO EM CARTÕES COM ÍCONES E LINHA DO TEMPO ── */
 function atualizarTabelaResumo(d){
   const grid = document.getElementById('reGrid');
   if(!grid) return;
@@ -1103,72 +1191,77 @@ function atualizarTabelaResumo(d){
       ${empreend ? `<div class="rh-emp">${empreend}</div>` : ''}
     </div>`;
 
-  // 3. PLANILHA — Como o imóvel é pago
-  htmlGeral += `<div class="sheet-title">Como o Imóvel é Pago</div>
-    <div class="sheet-wrap"><table class="sheet">
-      <thead><tr><th>Descrição</th><th class="num">Valor</th></tr></thead>
-      <tbody>
-        <tr><td class="lbl-strong">Valor do Imóvel</td><td class="num">${fmt(d.imovel)}</td></tr>`;
-  if(d.desconto>0) htmlGeral += `<tr><td style="color:var(--ok);">Desconto Comercial</td><td class="num" style="color:var(--ok);">− ${fmt(d.desconto)}</td></tr>`;
+  // 2. CARTÃO — Como o imóvel é pago
+  htmlGeral += `<div class="pcard">
+      <div class="pcard-hd"><span class="pcard-ico">${ICO.casa}</span>Como o Imóvel é Pago</div>
+      <div class="pcard-bd">`;
 
-  const recursos = [
-    ['Financiamento Bancário', d.financiamento],
-    ['Subsídio', d.subsidio],
-    ['Uso de FGTS', d.fgts],
-    ['Moradia Ceará', d.moradiaCeara]
-  ].filter(r => r[1] > 0);
-  recursos.forEach(([lbl, val]) => {
-    htmlGeral += `<tr><td>${lbl}</td><td class="num">${fmt(val)}</td></tr>`;
-  });
+  htmlGeral += pRow(ICO.casa, 'Valor do Imóvel', fmt(d.imovel), {strong:true});
+  if(d.desconto > 0) htmlGeral += pRow(ICO.moeda, 'Desconto Comercial', '− ' + fmt(d.desconto), {valStyle:'color:var(--ok);'});
+  if(d.financiamento > 0) htmlGeral += pRow(ICO.banco, 'Financiamento Bancário', fmt(d.financiamento));
+  if(d.subsidio > 0)      htmlGeral += pRow(ICO.mao, 'Subsídio', fmt(d.subsidio));
+  if(d.fgts > 0)          htmlGeral += pRow(ICO.moeda, 'Uso de FGTS', fmt(d.fgts));
+  if(d.moradiaCeara > 0)  htmlGeral += pRow(ICO.banco, 'Moradia Ceará', fmt(d.moradiaCeara));
 
-  htmlGeral += `<tr class="total-row"><td>Entrada · recursos próprios</td><td class="num big">${fmt(d.entrada)}</td></tr>
-      </tbody></table></div>`;
+  htmlGeral += pRow(ICO.carteira, 'Entrada · Recursos Próprios', fmt(d.entrada), {cls:'prow-entrada'});
+  htmlGeral += `</div></div>`;
 
-  // 4. PLANILHA — Como a entrada será paga
+  // 3. CARTÃO — Como a entrada será paga (linha do tempo)
   let htmlEntrada = '';
   if(d.entrada > 0) {
     const hasAporte = d.sinalP > 0 || d.sinais.some(s => s.v > 0) || d.baloes.some(b => b.v > 0);
     const temParcelas = (d.tipoEntrada === 'prepos') ? (d.qtdPre > 0 || d.qtdPos > 0) : (d.qtdParcelasLinear > 0 && d.vParcelaLinear > 0);
-
-    let rows = '';
+    const etapas = [];
 
     if(d.sinalP > 0 || d.sinais.some(s => s.v > 0)) {
-      rows += `<tr class="sec-row"><td colspan="3">Sinais / Entrada Inicial</td></tr>`;
-      if(d.sinalP > 0) rows += `<tr><td>Sinal Principal (Ato)</td><td class="num">${fmt(d.sinalP)}</td><td class="cond">${formatarData(d.dSinalP)}</td></tr>`;
-      d.sinais.forEach((s, i) => { if(s.v > 0) rows += `<tr><td>Sinal Complementar ${i+1}</td><td class="num">${fmt(s.v)}</td><td class="cond">${formatarData(s.d)}</td></tr>`; });
+      let r = '';
+      if(d.sinalP > 0) r += pRow3('Sinal Principal (Ato)', fmt(d.sinalP), formatarData(d.dSinalP));
+      d.sinais.forEach((s, i) => { if(s.v > 0) r += pRow3(`Sinal Complementar ${i+1}`, fmt(s.v), formatarData(s.d)); });
+      etapas.push({ico:ICO.doc, titulo:'Sinais / Entrada Inicial', rows:r});
     }
 
     if(d.baloes.some(b => b.v > 0)) {
-      rows += `<tr class="sec-row"><td colspan="3">Reforços / Balões Intermediários</td></tr>`;
-      d.baloes.forEach((b, i) => { if(b.v > 0) rows += `<tr><td>Balão Intermediário ${i+1}</td><td class="num">${fmt(b.v)}</td><td class="cond">${formatarData(b.d)}</td></tr>`; });
+      let r = '';
+      d.baloes.forEach((b, i) => { if(b.v > 0) r += pRow3(`Balão Intermediário ${i+1}`, fmt(b.v), formatarData(b.d)); });
+      etapas.push({ico:ICO.moeda, titulo:'Reforços / Balões Intermediários', rows:r});
     }
 
     if(d.saldo > 0) {
-      rows += `<tr class="sec-row"><td colspan="3">Parcelamento do Saldo</td></tr>`;
-      if(hasAporte) rows += `<tr><td class="lbl-strong">Saldo Líquido a Parcelar</td><td class="num">${fmt(d.saldo)}</td><td class="cond">—</td></tr>`;
+      let r = '';
+      if(hasAporte) r += pRow3('Saldo Líquido a Parcelar', fmt(d.saldo), '—');
 
       if(d.tipoEntrada === 'prepos') {
-        if(d.qtdPre > 0 && d.valPre > 0) rows += `<tr class="total-row"><td><span class="resumo-badge-fase badge-pre">Pré-Chaves</span> ${d.qtdPre}x mensais</td><td class="num big">${fmt(d.valParcPre)}</td><td class="cond">${d.dInicialPre ? 'Início: ' + formatarData(d.dInicialPre) : 'Período Obra'}</td></tr>`;
-        if(d.qtdPos > 0 && d.valPos > 0) rows += `<tr class="total-row"><td><span class="resumo-badge-fase badge-pos">Pós-Chaves</span> ${d.qtdPos}x mensais</td><td class="num big">${fmt(d.valParcPos)}</td><td class="cond">${d.dInicialPos ? 'Início: ' + formatarData(d.dInicialPos) : 'Pós-Entrega'}</td></tr>`;
+        if(d.qtdPre > 0 && d.valPre > 0) r += pRow3(`<span class="resumo-badge-fase badge-pre">Pré-Chaves</span> ${d.qtdPre}x mensais`, fmt(d.valParcPre), d.dInicialPre ? 'Início: <strong>' + formatarData(d.dInicialPre) + '</strong>' : 'Período Obra', {cls:'is-parcela', noCal:!d.dInicialPre});
+        if(d.qtdPos > 0 && d.valPos > 0) r += pRow3(`<span class="resumo-badge-fase badge-pos">Pós-Chaves</span> ${d.qtdPos}x mensais`, fmt(d.valParcPos), d.dInicialPos ? 'Início: <strong>' + formatarData(d.dInicialPos) + '</strong>' : 'Pós-Entrega', {cls:'is-parcela', noCal:!d.dInicialPos});
       } else {
-        if(d.vParcelaLinear > 0 && d.qtdParcelasLinear > 0) rows += `<tr class="total-row"><td><span class="resumo-badge-fase badge-linear">Linear</span> ${d.qtdParcelasLinear}x parcelas</td><td class="num big">${fmt(d.vParcelaLinear)}</td><td class="cond">${d.dInicialLinear ? 'Início: ' + formatarData(d.dInicialLinear) : 'Fluxo Direto'}</td></tr>`;
+        if(d.vParcelaLinear > 0 && d.qtdParcelasLinear > 0) r += pRow3(`<span class="resumo-badge-fase badge-linear">Linear</span> ${d.qtdParcelasLinear}x parcelas`, fmt(d.vParcelaLinear), d.dInicialLinear ? 'Início: <strong>' + formatarData(d.dInicialLinear) + '</strong>' : 'Fluxo Direto', {cls:'is-parcela', noCal:!d.dInicialLinear});
       }
 
-      if(!temParcelas) rows += `<tr><td colspan="3" class="cond" style="text-align:center; padding:10px;">Informe a quantidade de parcelas na seção 3 (Negociação da Entrada) para detalhar o valor mensal.</td></tr>`;
+      if(!temParcelas) r += `<div class="prow3"><div class="c-lbl" style="color:var(--slate); font-size:13px;">Informe a quantidade de parcelas na seção 3 (Negociação da Entrada) para detalhar o valor mensal.</div></div>`;
+      etapas.push({ico:ICO.moeda, titulo:'Parcelamento do Saldo', rows:r});
     }
 
     if(d.parcelaFin > 0) {
-      rows += `<tr class="sec-row"><td colspan="3">Financiamento Habitacional · Após a Entrega</td></tr>`;
-      rows += `<tr class="fin-row"><td class="lbl-strong">Parcela do Financiamento</td><td class="num big">${fmt(d.parcelaFin)}</td><td class="cond">${d.dEntrega ? 'Mensal · a partir de ' + formatarData(d.dEntrega) : 'Mensal, pós-entrega'}</td></tr>`;
+      const cond = d.dEntrega ? 'Mensal · a partir de <strong>' + formatarData(d.dEntrega) + '</strong>' : 'Mensal, pós-entrega';
+      etapas.push({ico:ICO.banco, titulo:'Financiamento Habitacional · Após a Entrega',
+        rows: pRow3('Parcela do Financiamento', fmt(d.parcelaFin), cond, {cls:'is-fin', noCal:!d.dEntrega})});
     }
 
-    htmlEntrada = `
-      <div class="sheet-title">Como a Entrada Será Paga</div>
-      <div class="hint-line" style="margin:-8px 0 10px;">Como a entrada de <strong>${fmt(d.entrada)}</strong> será quitada${hasAporte ? ' — sinais, reforços e parcelas.' : ' em parcelas.'}</div>
-      <div class="sheet-wrap"><table class="sheet">
-        <thead><tr><th>Descrição</th><th class="num">Valor</th><th>Data / Condição</th></tr></thead>
-        <tbody>${rows || `<tr><td colspan="3" class="cond" style="text-align:center; padding:12px;">Entrada quitada sem parcelamento adicional.</td></tr>`}</tbody>
-      </table></div>`;
+    if(etapas.length) {
+      htmlEntrada = `<div class="pcard">
+        <div class="pcard-hd"><span class="pcard-ico">${ICO.cartao}</span>Como a Entrada Será Paga</div>
+        <div class="pcard-bd">
+          <div class="phint">A entrada de <strong>${fmt(d.entrada)}</strong> será quitada${hasAporte ? ' com sinais, reforços e parcelas.' : ' em parcelas.'}</div>
+          <div class="ptl">`;
+      etapas.forEach((e, i) => {
+        htmlEntrada += `<div class="ptl-item">
+            <div class="ptl-mark">${e.ico}</div>
+            <div class="ptl-hd">${i+1}. ${e.titulo}</div>
+            <div class="ptl-box">${e.rows}</div>
+          </div>`;
+      });
+      htmlEntrada += `</div></div></div>`;
+    }
   }
 
   const htmlRodape = `<div style="text-align:center; font-size:10.5px; color:var(--slate2); margin-top:16px; padding-top:12px; border-top:1px solid var(--border);">
