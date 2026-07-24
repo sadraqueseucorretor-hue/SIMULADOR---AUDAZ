@@ -362,48 +362,54 @@ textarea{resize:vertical;height:80px;}
 .sheet .total-row .cond,.sheet .fin-row .cond{font-weight:700;}
 
 /* ── RESUMO EM CARTÕES COM ÍCONES E LINHA DO TEMPO ── */
-.pcard{background:var(--white);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:18px;box-shadow:0 4px 16px rgba(11,22,41,.07);}
-.pcard-hd{display:flex;align-items:center;gap:14px;background:var(--navy);padding:15px 20px;color:#fff;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;}
-.pcard-ico{width:36px;height:36px;border-radius:50%;border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.pcard-ico svg{width:19px;height:19px;stroke:var(--gold);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
-.pcard-bd{padding:16px;}
+.resumo-cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;}
+.resumo-cols .pcard{margin-bottom:0;}
+.pcard{background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:14px;box-shadow:0 3px 12px rgba(11,22,41,.06);}
+.pcard-hd{display:flex;align-items:center;gap:11px;background:var(--navy);padding:10px 14px;color:#fff;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
+.pcard-ico{width:30px;height:30px;border-radius:50%;border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.pcard-ico svg{width:16px;height:16px;stroke:var(--gold);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.pcard-bd{padding:11px;}
 
 /* linhas de 2 colunas (como o imóvel é pago) */
-.prow{display:flex;align-items:stretch;border:1px solid var(--border);border-radius:9px;overflow:hidden;margin-bottom:8px;}
+.prow{display:flex;align-items:stretch;border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:6px;}
 .prow:last-child{margin-bottom:0;}
-.prow-l{display:flex;align-items:center;gap:14px;padding:13px 16px;flex:1;min-width:0;}
-.prow-ico{width:28px;height:28px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
-.prow-ico svg{width:23px;height:23px;stroke:var(--navy);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;}
-.prow-lbl{font-size:15px;color:var(--navy);font-weight:500;}
-.prow-v{display:flex;align-items:center;justify-content:flex-end;padding:13px 18px;font-size:15px;font-weight:700;color:var(--navy);background:var(--surface);border-left:1px solid var(--border);min-width:172px;font-variant-numeric:tabular-nums;white-space:nowrap;}
+.prow-l{display:flex;align-items:center;gap:11px;padding:9px 13px;flex:1;min-width:0;}
+.prow-ico{width:24px;height:24px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.prow-ico svg{width:20px;height:20px;stroke:var(--navy);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;}
+.prow-lbl{font-size:14px;color:var(--navy);font-weight:500;}
+.prow-v{display:flex;align-items:center;justify-content:flex-end;padding:9px 14px;font-size:14px;font-weight:700;color:var(--navy);background:var(--surface);border-left:1px solid var(--border);min-width:138px;font-variant-numeric:tabular-nums;white-space:nowrap;}
 .prow-entrada{border:2px solid var(--gold);background:var(--gold-lt);}
 .prow-entrada .prow-lbl{font-weight:700;}
 .prow-entrada .prow-ico svg{stroke:#9A7B1F;}
 .prow-entrada .prow-v{background:var(--gold-solid);color:#fff;border-left:none;font-weight:800;}
 
 /* linha do tempo (como a entrada será paga) */
-.phint{font-size:13.5px;color:var(--slate);margin-bottom:18px;}
+.phint{font-size:13px;color:var(--slate);margin-bottom:12px;}
 .phint strong{color:var(--navy);}
-.ptl{position:relative;padding-left:66px;}
-.ptl::before{content:'';position:absolute;left:23px;top:26px;bottom:26px;border-left:2px dashed #C7CFDD;}
-.ptl-item{position:relative;margin-bottom:16px;}
+.ptl{position:relative;padding-left:50px;}
+.ptl::before{content:'';position:absolute;left:17px;top:20px;bottom:20px;border-left:2px dashed #C7CFDD;}
+.ptl-item{position:relative;margin-bottom:10px;}
 .ptl-item:last-child{margin-bottom:0;}
-.ptl-mark{position:absolute;left:-66px;top:2px;width:46px;height:46px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;z-index:2;box-shadow:0 3px 10px rgba(11,22,41,.22);}
-.ptl-mark svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;}
-.ptl-hd{background:var(--navy);color:#fff;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;padding:11px 16px;border-radius:9px 9px 0 0;}
-.ptl-box{border:1px solid var(--border);border-top:none;border-radius:0 0 9px 9px;overflow:hidden;}
+.ptl-mark{position:absolute;left:-50px;top:1px;width:36px;height:36px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;z-index:2;box-shadow:0 3px 8px rgba(11,22,41,.2);}
+.ptl-mark svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;}
+.ptl-hd{background:var(--navy);color:#fff;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:8px 13px;border-radius:8px 8px 0 0;}
+.ptl-box{border:1px solid var(--border);border-top:none;border-radius:0 0 8px 8px;overflow:hidden;}
 
 /* linhas de 3 colunas */
 .prow3{display:flex;align-items:center;border-top:1px solid var(--border);background:var(--white);}
 .prow3:first-child{border-top:none;}
-.prow3 .c-lbl{flex:1;padding:13px 16px;font-size:15px;color:var(--navy);display:flex;align-items:center;gap:10px;min-width:0;}
-.prow3 .c-val{padding:13px 16px;font-size:15px;font-weight:700;color:var(--navy);text-align:right;min-width:148px;font-variant-numeric:tabular-nums;white-space:nowrap;}
-.prow3 .c-dt{padding:13px 16px;font-size:13px;color:var(--slate);border-left:1px solid var(--border);min-width:180px;display:flex;align-items:center;gap:8px;}
-.prow3 .c-dt svg{width:16px;height:16px;stroke:var(--slate2);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;}
+.prow3 .c-lbl{flex:1;padding:9px 13px;font-size:14px;color:var(--navy);display:flex;align-items:center;gap:8px;min-width:0;}
+.prow3 .c-val{padding:9px 13px;font-size:14px;font-weight:700;color:var(--navy);text-align:right;min-width:118px;font-variant-numeric:tabular-nums;white-space:nowrap;}
+.prow3 .c-dt{padding:9px 13px;font-size:12.5px;color:var(--slate);border-left:1px solid var(--border);min-width:132px;display:flex;align-items:center;gap:7px;}
+.prow3 .c-dt svg{width:15px;height:15px;stroke:var(--slate2);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;}
 .prow3 .c-dt strong{color:var(--navy);}
 .prow3.is-parcela{background:var(--gold-lt);}
 .prow3.is-fin .c-val{color:var(--gold-solid);font-weight:800;}
 
+@media(max-width:1000px){
+  .resumo-cols{grid-template-columns:1fr;}
+  .resumo-cols .pcard{margin-bottom:0;}
+}
 @media(max-width:700px){
   .prow{flex-direction:column;}
   .prow-v{border-left:none;border-top:1px solid var(--border);justify-content:flex-start;min-width:0;}
@@ -413,7 +419,7 @@ textarea{resize:vertical;height:80px;}
   .prow3 .c-dt{border-left:none;border-top:1px solid var(--border);min-width:0;width:100%;}
   .ptl{padding-left:0;}
   .ptl::before{display:none;}
-  .ptl-mark{position:static;margin-bottom:10px;}
+  .ptl-mark{position:static;margin-bottom:8px;}
 }
 
 /* ESTILOS EXCLUSIVOS DO AJUSTE VISUAL DA TABELA COMERCIAL */
@@ -1184,7 +1190,7 @@ function atualizarTabelaResumo(d){
   const empreend = sv('empreendimento');
 
   // 1. Cabeçalho personalizado
-  let htmlGeral = `
+  const htmlHero = `
     <div class="resumo-hero">
       <div class="rh-lbl">Proposta preparada para</div>
       <div class="rh-cliente">${cliente || 'Cliente'}</div>
@@ -1192,7 +1198,7 @@ function atualizarTabelaResumo(d){
     </div>`;
 
   // 2. CARTÃO — Como o imóvel é pago
-  htmlGeral += `<div class="pcard">
+  let htmlGeral = `<div class="pcard">
       <div class="pcard-hd"><span class="pcard-ico">${ICO.casa}</span>Como o Imóvel é Pago</div>
       <div class="pcard-bd">`;
 
@@ -1268,7 +1274,7 @@ function atualizarTabelaResumo(d){
       Resumo gerado automaticamente · sujeito à análise de crédito e disponibilidade de unidades.
     </div>`;
 
-  grid.innerHTML = htmlGeral + htmlEntrada + htmlRodape;
+  grid.innerHTML = htmlHero + '<div class="resumo-cols">' + htmlGeral + htmlEntrada + '</div>' + htmlRodape;
 }
 
 /* ── CÁLCULO PRINCIPAL ── */
