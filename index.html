@@ -333,8 +333,10 @@ textarea{resize:vertical;height:80px;}
 .rhero-mount{position:absolute;right:0;top:0;height:100%;width:auto;opacity:.16;pointer-events:none;}
 
 /* ── mini-indicadores sob o card do imóvel ── */
-.rstats{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:12px;}
-.rstat{background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:11px 12px;display:flex;gap:9px;align-items:flex-start;}
+.rblock{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:14px;margin-top:12px;}
+.rblock-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--slate);margin-bottom:11px;}
+.rstats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;}
+.rstat{background:var(--white);border:1px solid var(--border);border-radius:9px;padding:11px 12px;display:flex;gap:9px;align-items:flex-start;}
 .rstat .rs-ico{width:22px;height:22px;flex-shrink:0;}
 .rstat .rs-ico svg{width:22px;height:22px;stroke:#2554C7;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;}
 .rstat .rs-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--slate);line-height:1.2;}
@@ -1253,18 +1255,20 @@ function atualizarTabelaResumo(d){
   if(d.fgts > 0)          htmlGeral += pRow(ICO.moeda, 'Uso de FGTS', fmt(d.fgts));
   if(d.moradiaCeara > 0)  htmlGeral += pRow(ICO.banco, 'Moradia Ceará', fmt(d.moradiaCeara));
 
-  htmlGeral += pRow(ICO.carteira, 'Entrada · Recursos Próprios', fmt(d.entrada), {cls:'prow-entrada'});
+  htmlGeral += pRow(ICO.carteira, 'Entrada Total (Recursos Próprios)', fmt(d.entrada), {cls:'prow-entrada'});
   htmlGeral += `</div></div>`;
 
   // mini-indicadores
   const pctEntrada = d.imovel > 0 ? (d.entrada / d.imovel) * 100 : 0;
   const pctFin = d.imovel > 0 ? (d.financiamento / d.imovel) * 100 : 0;
   const fmtPct = (p) => p.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2}) + '%';
-  htmlGeral += `<div class="rstats">
-      <div class="rstat"><span class="rs-ico">${ICO.pizza}</span><div><div class="rs-lbl">% de Entrada</div><div class="rs-val">${fmtPct(pctEntrada)}</div><div class="rs-sub">do valor do imóvel</div></div></div>
-      <div class="rstat"><span class="rs-ico">${ICO.calc}</span><div><div class="rs-lbl">Financiamento</div><div class="rs-val">${fmtPct(pctFin)}</div><div class="rs-sub">do valor do imóvel</div></div></div>
-      <div class="rstat"><span class="rs-ico">${ICO.mao}</span><div><div class="rs-lbl">Recursos Próprios</div><div class="rs-val" style="font-size:14px;">${fmt(d.entrada)}</div><div class="rs-sub">entrada total</div></div></div>
-      <div class="rstat"><span class="rs-ico">${ICO.cal}</span><div><div class="rs-lbl">Prazo Total</div><div class="rs-val" style="font-size:14px;">Até entrega</div><div class="rs-sub">do imóvel</div></div></div>
+  htmlGeral += `<div class="rblock">
+      <div class="rblock-title">Indicadores do Plano</div>
+      <div class="rstats">
+        <div class="rstat"><span class="rs-ico">${ICO.pizza}</span><div><div class="rs-lbl">% de Entrada</div><div class="rs-val">${fmtPct(pctEntrada)}</div><div class="rs-sub">do valor do imóvel</div></div></div>
+        <div class="rstat"><span class="rs-ico">${ICO.calc}</span><div><div class="rs-lbl">Financiamento</div><div class="rs-val">${fmtPct(pctFin)}</div><div class="rs-sub">do valor do imóvel</div></div></div>
+        <div class="rstat"><span class="rs-ico">${ICO.mao}</span><div><div class="rs-lbl">Recursos Próprios</div><div class="rs-val" style="font-size:14px;">${fmt(d.entrada)}</div><div class="rs-sub">entrada total</div></div></div>
+      </div>
     </div></div>`;
 
   // 3. CARTÃO — Como a entrada será paga (linha do tempo)
@@ -1310,7 +1314,7 @@ function atualizarTabelaResumo(d){
 
     if(etapas.length) {
       htmlEntrada = `<div class="pcard">
-        <div class="pcard-hd"><span class="pcard-ico">${ICO.cartao}</span>Como a Entrada Será Paga</div>
+        <div class="pcard-hd"><span class="pcard-ico">${ICO.cartao}</span>Como Será Pago o Plano</div>
         <div class="pcard-bd">
           <div class="phint">A entrada de <strong>${fmt(d.entrada)}</strong> será quitada${hasAporte ? ' com sinais, reforços e parcelas.' : ' em parcelas.'}</div>
           <div class="ptl">`;
