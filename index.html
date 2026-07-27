@@ -100,6 +100,14 @@ body{
 }
 .card-title.center::before { display: none; }
 
+/* ── TEXTOS DIDÁTICOS (subtítulo de seção + dica de campo) ── */
+.card-sub{font-size:12.5px;color:var(--slate);line-height:1.5;margin:-10px 0 18px;padding-left:12px;border-left:3px solid var(--gold);}
+.card-sub.center{text-align:center;padding-left:0;border-left:none;margin-top:-16px;}
+.fld-hint{display:block;font-size:10.5px;color:var(--slate2);margin-top:4px;line-height:1.35;}
+.legenda-risco{display:flex;flex-wrap:wrap;gap:14px;margin:-6px 0 18px;font-size:11.5px;color:var(--slate);}
+.legenda-risco span{display:inline-flex;align-items:center;gap:6px;}
+.legenda-risco i{width:11px;height:11px;border-radius:50%;flex-shrink:0;}
+
 /* ── FORM ── */
 .fg{margin-bottom:12px;}
 .fg:last-child{margin-bottom:0;}
@@ -696,35 +704,38 @@ button:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.1);}
 
   <div class="card">
     <div class="card-title step"><span class="step-num">1</span>Dados do Cliente</div>
+    <div class="card-sub">Quem está comprando. A renda é usada para calcular quanto o pagamento compromete do orçamento.</div>
     <div class="fg"><label>Nome do Cliente</label><input type="text" id="clienteNome" placeholder="Ex: João da Silva"></div>
-    <div class="fg"><label>Renda Mensal</label><input type="text" id="renda" class="money" placeholder="R$ 0,00"></div>
+    <div class="fg"><label>Renda Mensal</label><input type="text" id="renda" class="money" placeholder="R$ 0,00"><span class="fld-hint">Renda familiar somada. Usada para avaliar o comprometimento mensal.</span></div>
     <div class="fg"><label>Empreendimento</label><input type="text" id="empreendimento" placeholder="Ex: Residential Vitória"></div>
-    <div class="fg"><label>Previsão de entrega</label><input type="date" id="dataAtual"></div>
+    <div class="fg"><label>Previsão de entrega</label><input type="date" id="dataAtual"><span class="fld-hint">Data prevista para a entrega das chaves.</span></div>
   </div>
 
   <div class="card">
     <div class="card-title step"><span class="step-num">2</span>Valores da Proposta</div>
-    <div class="fg"><label>Valor do Imóvel</label><input type="text" id="imovel" class="money" placeholder="R$ 0,00"></div>
-    <div class="fg"><label>Financiamento</label><input type="text" id="financiamento" class="money" placeholder="R$ 0,00"></div>
-    
+    <div class="card-sub">Como o valor do imóvel será coberto. Tudo que <strong>não</strong> vier destes recursos vira a entrada que o cliente paga.</div>
+    <div class="fg"><label>Valor do Imóvel</label><input type="text" id="imovel" class="money" placeholder="R$ 0,00"><span class="fld-hint">Preço total da unidade.</span></div>
+    <div class="fg"><label>Financiamento</label><input type="text" id="financiamento" class="money" placeholder="R$ 0,00"><span class="fld-hint">Quanto o banco vai emprestar (pago após a entrega).</span></div>
+
     <div class="g2" style="margin-bottom:0; gap:10px;">
-      <div class="fg-compact"><label>Desconto Comercial</label><input type="text" id="desconto" class="money" placeholder="R$ 0,00"></div>
-      <div class="fg-compact"><label>Subsídio</label><input type="text" id="subsidio" class="money" placeholder="R$ 0,00"></div>
+      <div class="fg-compact"><label>Desconto Comercial</label><input type="text" id="desconto" class="money" placeholder="R$ 0,00"><span class="fld-hint">Abatimento no preço do imóvel.</span></div>
+      <div class="fg-compact"><label>Subsídio</label><input type="text" id="subsidio" class="money" placeholder="R$ 0,00"><span class="fld-hint">Auxílio do governo. Não precisa devolver.</span></div>
     </div>
-    
+
     <div class="g2" style="margin-bottom:12px; gap:10px;">
-      <div class="fg-compact"><label>FGTS</label><input type="text" id="fgts" class="money" placeholder="R$ 0,00"></div>
-      <div class="fg-compact"><label>Moradia Ceará</label><input type="text" id="moradiaCeara" class="money" placeholder="R$ 0,00"></div>
+      <div class="fg-compact"><label>FGTS</label><input type="text" id="fgts" class="money" placeholder="R$ 0,00"><span class="fld-hint">Saldo do FGTS usado na compra.</span></div>
+      <div class="fg-compact"><label>Moradia Ceará</label><input type="text" id="moradiaCeara" class="money" placeholder="R$ 0,00"><span class="fld-hint">Subsídio do programa estadual.</span></div>
     </div>
-    
-    <div class="fg"><label>Parcela do Financiamento (Pós-Entrega)</label><input type="text" id="parcelaFinanciamento" class="money" placeholder="R$ 0,00"></div>
+
+    <div class="fg"><label>Parcela do Financiamento (Pós-Entrega)</label><input type="text" id="parcelaFinanciamento" class="money" placeholder="R$ 0,00"><span class="fld-hint">Valor mensal que começa depois da entrega das chaves.</span></div>
   </div>
 
 </div>
 
 <div class="card">
 
-  <div class="card-title center step" style="margin-bottom:24px;"><span class="step-num">3</span>Negociação da Entrada</div>
+  <div class="card-title center step" style="margin-bottom:14px;"><span class="step-num">3</span>Negociação da Entrada</div>
+  <div class="card-sub center">Como o cliente vai pagar a entrada: uma parte à vista (sinais), reforços maiores ao longo do caminho (balões) e o restante dividido em parcelas mensais.</div>
 
   <div class="kpi-row">
     <div class="kpi">
@@ -863,7 +874,14 @@ button:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.1);}
 
 <div class="card">
   <div class="card-title step"><span class="step-num">4</span>Análise Financeira e Riscos</div>
-  
+  <div class="card-sub">Indicadores de saúde da proposta. Quanto menor o comprometimento da renda, mais segura é a negociação.</div>
+  <div class="legenda-risco">
+    <span><i style="background:#16A34A"></i> Verde: saudável</span>
+    <span><i style="background:#EAB308"></i> Amarelo: atenção</span>
+    <span><i style="background:#F97316"></i> Laranja: risco alto</span>
+    <span><i style="background:#DC2626"></i> Vermelho: crítico</span>
+  </div>
+
   <div class="risco-grid" id="riscoGrid">
     <div class="risco-card" id="cardRiscoOperacao">
       <div class="rc-lbl">Saúde da Entrada (Risco da Operação)</div>
