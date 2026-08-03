@@ -77,6 +77,7 @@ body{
   box-shadow:var(--sh);
   border:1px solid var(--border);
   margin-bottom:18px;
+  overflow:hidden;
   transition:box-shadow .2s ease, border-color .2s ease;
 }
 .card:hover{
@@ -181,9 +182,20 @@ textarea{resize:vertical;height:80px;}
 .hint-line strong{color:var(--navy);}
 
 /* ── NUMERAÇÃO DE ETAPAS (FLUXO GUIADO) ── */
-.step-num{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--navy),var(--navy2));color:var(--white);font-size:13px;font-weight:800;flex-shrink:0;border:2px solid var(--gold);box-shadow:0 2px 8px rgba(11,22,41,.22);}
+.step-num{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.08);color:var(--white);font-size:13px;font-weight:800;flex-shrink:0;border:2px solid var(--gold);box-shadow:0 2px 8px rgba(0,0,0,.25);}
 .card-title.step::before{display:none;}
-.card-title.step{gap:11px;font-size:15px;}
+.card-title.step{
+  margin:-24px -28px 22px;
+  padding:14px 28px;
+  background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%);
+  color:#fff;
+  border-radius:12px 12px 0 0;
+  border-bottom:2px solid var(--gold);
+  font-size:13.5px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.5px;
+  gap:12px;
+}
+.card-title.step.center{justify-content:center;font-size:14px;}
 
 /* ── PARCELAMENTO BOX (CLARO E LEVE) ── */
 .parc-box{
@@ -210,11 +222,12 @@ textarea{resize:vertical;height:80px;}
 /* ── PAINEL RISCO ── */
 .risco-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:18px;}
 .risco-card{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--rsm);padding:16px 20px;
+  background:var(--white);border:1px solid var(--border);
+  border-radius:10px;padding:18px 20px;
+  box-shadow:0 2px 10px rgba(11,22,41,.05);
 }
-.rc-lbl{font-size:11px;font-weight:600;color:var(--slate);margin-bottom:8px;}
-.rc-pct{font-size:24px;font-weight:700;margin-bottom:8px;color:var(--navy);}
+.rc-lbl{font-size:11px;font-weight:700;color:var(--slate);margin-bottom:10px;text-transform:uppercase;letter-spacing:.3px;}
+.rc-pct{font-size:28px;font-weight:800;margin-bottom:10px;color:var(--navy);letter-spacing:-.5px;}
 .rc-bar-bg{height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin-bottom:10px;}
 .rc-bar{height:100%;border-radius:3px;transition:width .5s;}
 .rc-insight{font-size:12px;color:var(--slate);line-height:1.4;}
@@ -431,6 +444,8 @@ textarea{resize:vertical;height:80px;}
 .prow3 .c-dt svg{width:15px;height:15px;stroke:var(--slate2);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;}
 .prow3 .c-dt strong{color:var(--navy);}
 .prow3.is-parcela{background:var(--gold-lt);}
+.prow3.is-fin{background:var(--gold-lt);}
+.prow3.is-fin .c-lbl{font-weight:700;}
 .prow3.is-fin .c-val{color:var(--gold-solid);font-weight:800;}
 
 @media(max-width:1000px){
@@ -727,7 +742,7 @@ button:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.1);}
 
 <div class="card">
 
-  <div class="card-title center step" style="margin-bottom:24px;"><span class="step-num">3</span>Negociação da Entrada</div>
+  <div class="card-title center step"><span class="step-num">3</span>Negociação da Entrada</div>
 
   <div class="kpi-row">
     <div class="kpi">
@@ -904,9 +919,7 @@ button:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.1);}
 </div>
 
 <div class="card">
-  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-    <div class="card-title step" style="margin:0;"><span class="step-num">5</span>Resumo Comercial da Proposta</div>
-  </div>
+  <div class="card-title step"><span class="step-num">5</span>Resumo Comercial da Proposta</div>
   <div class="resumo-table-wrap" id="reGrid">
     <div class="re-empty">Preencha os dados para visualizar a tabela de resumo.</div>
   </div>
@@ -929,7 +942,7 @@ button:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.1);}
 </div>
 
 <div class="card" id="fullTimeline">
-  <div class="card-title center step" style="margin-bottom: 8px;"><span class="step-num">7</span>Linha do Tempo da Compra</div>
+  <div class="card-title center step"><span class="step-num">7</span>Linha do Tempo da Compra</div>
   <div style="text-align:center; font-size:12px; color:var(--slate); margin-bottom: 24px;">Entenda as principais etapas do processo de aquisição do seu imóvel.</div>
   
   <div class="jornada-wrap">
@@ -1252,8 +1265,8 @@ function atualizarTabelaResumo(d){
       <div class="pcard-bd">`;
 
   htmlGeral += pRow(ICO.casa, 'Valor do Imóvel', fmt(d.imovel), {strong:true});
-  if(d.desconto > 0) htmlGeral += pRow(ICO.moeda, 'Desconto Comercial', '− ' + fmt(d.desconto), {valStyle:'color:var(--ok);'});
   if(d.financiamento > 0) htmlGeral += pRow(ICO.banco, 'Financiamento Bancário', fmt(d.financiamento));
+  if(d.desconto > 0) htmlGeral += pRow(ICO.moeda, 'Desconto Comercial', '− ' + fmt(d.desconto), {valStyle:'color:var(--ok);'});
   if(d.subsidio > 0)      htmlGeral += pRow(ICO.mao, 'Subsídio', fmt(d.subsidio));
   if(d.fgts > 0)          htmlGeral += pRow(ICO.moeda, 'Uso de FGTS', fmt(d.fgts));
   if(d.moradiaCeara > 0)  htmlGeral += pRow(ICO.banco, 'Moradia Ceará', fmt(d.moradiaCeara));
